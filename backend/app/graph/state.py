@@ -66,6 +66,3 @@ class SynapseState(TypedDict):
     status: str
 
 
-# Backwards compatibility alias
-MedPulseState = SynapseState
-
