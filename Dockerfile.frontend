@@ -1,0 +1,24 @@
+FROM oven/bun:1-slim AS builder
+
+WORKDIR /app
+
+COPY frontend/package.json frontend/bun.lock* ./
+RUN bun install --frozen-lockfile || bun install
+
+COPY frontend ./
+ENV NEXT_TELEMETRY_DISABLED=1
+RUN bun run build
+
+FROM oven/bun:1-slim AS runner
+WORKDIR /app
+
+ENV NODE_ENV=production
+ENV PORT=3000
+
+COPY --from=builder /app/.next/standalone ./
+COPY --from=builder /app/.next/static ./.next/static
+COPY --from=builder /app/public ./public 2>/dev/null || true
+
+EXPOSE 3000
+
+CMD ["bun", "run", "server.js"]

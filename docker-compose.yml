@@ -1,0 +1,70 @@
+version: "3.8"
+
+services:
+  # 1. PostgreSQL 16 with pgvector extension
+  postgres:
+    image: pgvector/pgvector:pg16
+    container_name: synapse-postgres
+    restart: unless-stopped
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: synapse
+      POSTGRES_PASSWORD: clinical_secure_pass
+      POSTGRES_DB: synapse_db
+    volumes:
+      - pgvector_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U synapse -d synapse_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  # 2. FastAPI Backend & LangGraph Agentic RAG Engine
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile.backend
+    container_name: synapse-backend
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    environment:
+      - HOST=0.0.0.0
+      - PORT=8000
+      - ENVIRONMENT=production
+      - DATABASE_URL=postgresql://synapse:clinical_secure_pass@postgres:5432/synapse_db
+      - OPENROUTER_API_KEY=${OPENROUTER_API_KEY:-}
+      - OPENROUTER_CHAT_MODEL=${OPENROUTER_CHAT_MODEL:-nvidia/nemotron-3-ultra-550b-a55b:free}
+      - OPENROUTER_FALLBACK_CHAT_MODELS=${OPENROUTER_FALLBACK_CHAT_MODELS:-qwen/qwen3.8-27b:free,google/gemma-4-31b-it:free,openrouter/free}
+      - OPENROUTER_EMBEDDING_MODEL=${OPENROUTER_EMBEDDING_MODEL:-nvidia/nemotron-3-embed-1b:free}
+      - OPENAI_API_KEY=${OPENAI_API_KEY:-}
+      - GEMINI_API_KEY=${GEMINI_API_KEY:-}
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY:-}
+      - OLLAMA_BASE_URL=${OLLAMA_BASE_URL:-http://host.docker.internal:11434}
+      - FAST_LLM_MODEL=${FAST_LLM_MODEL:-nvidia/nemotron-3-ultra-550b-a55b:free}
+      - SYNTHESIS_LLM_MODEL=${SYNTHESIS_LLM_MODEL:-nvidia/nemotron-3-ultra-550b-a55b:free}
+      - EVALUATOR_LLM_MODEL=${EVALUATOR_LLM_MODEL:-nvidia/nemotron-3-ultra-550b-a55b:free}
+    volumes:
+      - ehr_data:/app/data
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  # 3. Next.js 15 Standalone Frontend
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+    container_name: synapse-frontend
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      - NEXT_PUBLIC_BACKEND_URL=http://localhost:8000
+    depends_on:
+      - backend
+
+volumes:
+  pgvector_data:
+  ehr_data:

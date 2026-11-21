@@ -1,0 +1,169 @@
+# Synapse Clinical v4.1 — Multi-Model Agentic RAG Healthcare Platform with Patient Conversational AI
+
+[![Tests Passing](https://img.shields.io/badge/pytest-56%20passed-10b981.svg)]()
+[![Poteto Pyramid](https://img.shields.io/badge/poteto--pyramid-level%201--3%20verified-0ea5e9.svg)]()
+[![Unslop UI](https://img.shields.io/badge/ui-unslopped%20clinical-14b8a6.svg)]()
+[![Next.js 15](https://img.shields.io/badge/next.js-15.5%20standalone-white.svg)]()
+[![FastAPI + LangGraph](https://img.shields.io/badge/langgraph-dual%20agentic%20engines-blue.svg)]()
+[![Bilingual Engine](https://img.shields.io/badge/multilingual-English%20%26%20বাংলা-emerald.svg)]()
+[![FlashRank Reranker](https://img.shields.io/badge/reranker-FlashRank%20TinyBERT%20ONNX-amber.svg)]()
+[![Multi-Model LiteLLM](https://img.shields.io/badge/orchestrator-LiteLLM%20Universal-purple.svg)]()
+
+> **Enterprise-Grade Healthcare Intelligence Platform**: A dual-experience AI system featuring a **Public Patient Conversational AI Agent** (bilingual English & Bengali, emergency screening, embeddable widget, human handoff queue) alongside an authenticated **Clinician Copilot** (14-node LangGraph state machine, Corrective RAG, claim-level Self-RAG verification, deterministic calculators, pharmacovigilance contraindications, and regulatory Human-in-the-Loop oversight).
+
+---
+
+> [!CAUTION]
+> **RESEARCH & PORTFOLIO DEMONSTRATION ONLY**  
+> Synapse Clinical operates strictly on synthetic patient cohorts (P101–P104) and public clinical guidelines (NICE, KDIGO, WHO, BMDC). This software is not an FDA/CE-cleared medical device and is **strictly prohibited from autonomous patient diagnosis, prescription issuance, or treatment execution**. All high-risk interventions are gated by mandatory clinician sign-off.
+
+---
+
+## 1. Dual AI Experience Architecture
+
+Synapse Clinical v4.1 delivers two distinct clinical experiences operating under an impermeable security boundary:
+
+```mermaid
+graph TD
+    subgraph Public["Public Patient Experience"]
+        Visitor[Public Website Visitor] --> Widget["Embeddable Chat Widget (widget.js)"]
+        Widget --> PatientGraph["Patient LangGraph Engine"]
+        PatientGraph --> LangDetect["Language Detector (EN / বাংলা)"]
+        LangDetect --> SafetyScreen["Red-Flag Emergency Screening"]
+        SafetyScreen -- Emergency --> EmRouter["Emergency Guidance (911 / ৯৯৯)"]
+        SafetyScreen -- Routine --> Intent["Intent Classifier & Policy Guard"]
+        Intent --> PatientRetriever["Knowledge Retriever (access_level=PATIENT_APPROVED)"]
+        PatientRetriever --> PatientGen["Bilingual Response Generator"]
+        PatientGen --> Disclaimer["Mandatory Regulatory Disclaimer"]
+        Intent -- Complex / Urgent --> HandoffQueue["Clinic Human Handoff Queue"]
+    end
+
+    subgraph Boundary["Impermeable Security & Privacy Isolation"]
+        BoundaryLine["Zero SQL Access │ No EHR Mutation │ No Diagnosis / Prescribing"]
+    end
+
+    subgraph Clinical["Authenticated Clinician Workspace"]
+        HandoffQueue --> TriageStaff["Triage Nurses & MD Staff"]
+        Physician[Licensed Physician] --> ClinicianGraph["14-Node Clinician LangGraph"]
+        ClinicianGraph --> ASTSQL["Read-Only AST text_to_sql (EHR)"]
+        ClinicianGraph --> Calcs["Clinical Calculators (CKD-EPI eGFR / CrCl)"]
+        ClinicianGraph --> DDI["Pharmacovigilance Contraindication Engine"]
+        ClinicianGraph --> HybridRetriever["Hybrid Retrieval (Dense + BM25 + FlashRank)"]
+        HybridRetriever --> CRAG["Corrective RAG (CRAG) Grader"]
+        CRAG --> Synthesis["Evidence-Grounded Synthesis"]
+        Synthesis --> SelfRAG["Claim-Level Self-RAG NLI Verifier"]
+        SelfRAG --> HITLGate["Regulated HITL Interrupt Gate"]
+        HITLGate --> AuditLog["Immutable Regulatory Audit Trail"]
+    end
+```
+
+---
+
+## 2. Core Capabilities
+
+### 2.1 Patient Conversational AI Agent
+- **Bilingual English & বাংলা (Bengali)**: Automatic Unicode character detection (`\u0980-\u09FF`) enabling immediate localized responses without waiting for an LLM call.
+- **Red-Flag Emergency Triage**: Detects acute chest pain, shortness of breath, stroke symptoms, and anaphylaxis, branching directly to urgent hotline instructions (**911** for US, **৯৯৯** for Bangladesh).
+- **Strict Non-Diagnostic Safety Guard**: Refuses autonomous diagnosis or prescription requests, explaining topics in compassionate 6th-grade language with mandatory disclaimers.
+- **Anonymous vs Authenticated Mode**: Anonymous public health education by default, with secure Patient ID + MRN login for synthetic EHR record review.
+- **Human Triage Escalation Queue**: Tracks handoff requests through `REQUESTED` $\rightarrow$ `WAITING` $\rightarrow$ `ASSIGNED` $\rightarrow$ `IN_REVIEW` $\rightarrow$ `RESOLVED`.
+
+### 2.2 Clinician Copilot Workspace
+- **14-Node LangGraph State Machine**: Sequence-controlled execution with state checkpoints and thread checkpointers.
+- **Corrective RAG (CRAG)**: Evaluates chunk relevance scores ($0.0$ to $1.0$); rewrites queries or explicitly abstains when evidence is insufficient.
+- **Claim-Level Self-RAG Verification**: Decomposes clinical recommendations into atomic sentences and verifies entailment against source documents.
+- **Deterministic Pharmacovigilance & Calculators**: Real-time screening for Warfarin+NSAID fatal bleeds, Metformin in CKD Stage 4, and CKD-EPI 2021 eGFR calculations.
+- **Regulated Human-in-the-Loop (HITL) Gate**: Pauses execution for chemotherapy and high-risk orders until physician override and digital signature.
+
+### 2.3 Multi-Tenant Hospital Architecture
+- **Tenant Isolation**: Separate hospital configurations for `DEFAULT_HOSPITAL` (Synapse General, US, 911) and `CLINIC_DHAKA` (Dhaka Health Center, BD, 999).
+- **Domain Allowlisting**: Verifies origin headers before allowing chat widget embedding.
+- **Knowledge Access Classification**: Document and chunk storage classified as `PATIENT_APPROVED` vs `CLINICIAN_ONLY`.
+
+---
+
+## 3. The 12 Platform Subsystems
+
+| # | View | Subsystem Name | Description |
+| :---: | :--- | :--- | :--- |
+| **1** | `overview` | **Overview Dashboard** | Executive summary: active conversations, triages, escalations, latency, and 1-click clinical scenarios. |
+| **2** | `patient-agent` | **Patient AI Agent** | Live interactive demo, bilingual switcher, emergency warning badges, and telemetry dashboard. |
+| **3** | `workspace` | **Clinician Copilot** | Deep clinical workspace: EHR sidebar, multi-agent trace stream, DDI alerts, and HITL override modal. |
+| **4** | `knowledge` | **Knowledge Base** | Document and chunk viewer with `PATIENT_APPROVED` vs `CLINICIAN_ONLY` badges, PDF upload, and URL ingest. |
+| **5** | `runs` | **Agent Runs** | Telemetry, execution history, and real-time trace inspection for clinical runs. |
+| **6** | `orchestrator` | **Model Orchestrator** | Multi-model routing policies (LiteLLM), circuit breaker status, and live provider benchmarks. |
+| **7** | `handoff` | **Human Support / Handoff** | Escalation ticket queue for clinic triage staff with urgency filters, assignment, and clinical notes. |
+| **8** | `evaluation` | **RAG Evaluation** | Quantitative benchmarks (Recall@5, Precision@5, MRR, nDCG@5, Groundedness %, Ablations). |
+| **9** | **Tenants** | `tenants` | Multi-tenant hospital administration, allowed domains, logos, and localized emergency hotlines. |
+| **10** | `users` | **User & Role RBAC** | Role-based access control (Admin, Clinician, Triage Nurse, Patient) and permission matrix. |
+| **11** | `audit` | **Regulatory Audit Logs** | Immutable regulatory audit trail for clinician HITL sign-offs and patient consent records. |
+| **12** | `settings` | **System Settings** | Platform configuration, model API keys, database connection pooling, and preferences. |
+
+---
+
+## 4. 1-Line Embeddable Widget Integration
+
+Embed the patient assistant into any website, WordPress template, or patient portal:
+
+```html
+<script 
+  src="https://synapse.ai/widget.js" 
+  data-tenant-id="DEFAULT_HOSPITAL" 
+  data-api-url="http://127.0.0.1:8000" 
+  data-lang="en" 
+  data-theme="dark">
+</script>
+```
+
+---
+
+## 5. Quickstart: Running Locally
+
+### Prerequisites
+- Python 3.11+
+- Node.js 18+ (or Bun 1.2+)
+
+### Backend Setup
+```bash
+# 1. Activate virtual environment
+source .venv/bin/activate
+
+# 2. Configure environment (no secrets in repo)
+cp .env.example .env
+
+# 3. Start FastAPI server with live reload
+uvicorn backend.app.api.main:app --host 127.0.0.1 --port 8000 --reload
+```
+API Documentation available at: `http://127.0.0.1:8000/docs`
+
+### Frontend Setup
+```bash
+# 1. Navigate to frontend directory
+cd frontend
+
+# 2. Install dependencies & build
+bun install
+bun run build
+
+# 3. Start Next.js development server
+bun run dev
+```
+Client Application accessible at: `http://localhost:3000`
+
+### Running the Test Suite
+```bash
+PYTHONPATH=backend .venv/bin/pytest backend/tests -v
+```
+**All 55 tests pass in ~11 seconds.**
+
+---
+
+## 6. Docker & Container Deployment
+
+```bash
+# Build and run backend, frontend, and PostgreSQL + pgvector
+docker-compose up --build -d
+```
+- Frontend: `http://localhost:3000`
+- Backend API: `http://localhost:8000`
+- Health check: `http://localhost:8000/health`
