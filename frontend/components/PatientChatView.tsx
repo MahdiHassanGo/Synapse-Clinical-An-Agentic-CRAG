@@ -52,7 +52,7 @@ export function PatientChatView() {
     language_distribution: { en: 34, bn: 18 }
   });
 
-  const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || "http://127.0.0.1:8000";
+  const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || "";
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   // Initialize or fetch session
@@ -213,10 +213,11 @@ export function PatientChatView() {
   };
 
   const copyWidgetCode = () => {
+    const origin = typeof window !== "undefined" ? window.location.origin : (BACKEND_URL || "https://frontend-chi-seven-22.vercel.app");
     const code = `<script 
-  src="${BACKEND_URL}/widget.js" 
+  src="${origin}/widget.js" 
   data-tenant-id="${tenantId}" 
-  data-api-url="${BACKEND_URL}" 
+  data-api-url="${origin}" 
   data-lang="${language}" 
   data-theme="dark">
 </script>`;
@@ -527,9 +528,9 @@ export function PatientChatView() {
           </p>
           <pre className="p-2.5 rounded-lg bg-graphite-950 text-[10px] font-mono text-graphite-300 overflow-x-auto border border-white/[0.04]">
 {`<script 
-  src="${BACKEND_URL}/widget.js" 
+  src="${typeof window !== "undefined" ? window.location.origin : "https://frontend-chi-seven-22.vercel.app"}/widget.js" 
   data-tenant-id="${tenantId}" 
-  data-api-url="${BACKEND_URL}"
+  data-api-url="${typeof window !== "undefined" ? window.location.origin : "https://frontend-chi-seven-22.vercel.app"}"
   data-lang="${language}">
 </script>`}
           </pre>

@@ -13,7 +13,7 @@
 
   const scriptTag = document.currentScript || document.querySelector("script[data-tenant-id]");
   const tenantId = scriptTag?.getAttribute("data-tenant-id") || "DEFAULT_HOSPITAL";
-  const apiUrl = (scriptTag?.getAttribute("data-api-url") || "http://127.0.0.1:8000").replace(/\/$/, "");
+  const apiUrl = (scriptTag?.getAttribute("data-api-url") || "").replace(/\/$/, "");
   const defaultLang = scriptTag?.getAttribute("data-lang") || "en";
   const theme = scriptTag?.getAttribute("data-theme") || "dark";
 

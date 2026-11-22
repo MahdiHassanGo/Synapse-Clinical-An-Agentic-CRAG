@@ -14,6 +14,9 @@
 [![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/MahdiHassanGo/Synapse-Clinical-An-Agentic-CRAG)
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FMahdiHassanGo%2FSynapse-Clinical-An-Agentic-CRAG&root-directory=frontend)
 
+> 🚀 **Live Interactive Demo:** [https://frontend-chi-seven-22.vercel.app](https://frontend-chi-seven-22.vercel.app)  
+> Fully autonomous live deployment on Vercel featuring synthetic EHR cohort (P101–P104), bilingual patient navigator (English & বাংলা), interactive floating widget, emergency red-flag triage, real-time SSE CRAG/Self-RAG evaluation stream, and clinician HITL safety oversight.
+
 > **Enterprise-Grade Healthcare Intelligence Platform**: A dual-experience AI system featuring a **Public Patient Conversational AI Agent** (bilingual English & Bengali, emergency screening, embeddable widget, human handoff queue) alongside an authenticated **Clinician Copilot** (14-node LangGraph state machine, Corrective RAG, claim-level Self-RAG verification, deterministic calculators, pharmacovigilance contraindications, and regulatory Human-in-the-Loop oversight).
 
 ---

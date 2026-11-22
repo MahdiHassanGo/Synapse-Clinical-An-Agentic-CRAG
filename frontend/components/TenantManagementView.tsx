@@ -34,7 +34,7 @@ export function TenantManagementView() {
   const [isSaved, setIsSaved] = useState<boolean>(false);
   const [saveError, setSaveError] = useState<string | null>(null);
 
-  const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || "http://127.0.0.1:8000";
+  const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || "";
 
   const fetchTenants = async () => {
     try {

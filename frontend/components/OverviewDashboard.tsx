@@ -32,7 +32,7 @@ export function OverviewDashboard({ onSelectView, onLaunchScenario }: OverviewDa
     language_distribution: { en: 34, bn: 18 }
   });
 
-  const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || "http://127.0.0.1:8000";
+  const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || "";
 
   useEffect(() => {
     fetch(`${BACKEND_URL}/api/v1/patient/analytics`)

@@ -31,7 +31,7 @@ export function AuditLogsView() {
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [patientFilter, setPatientFilter] = useState<string>("ALL");
 
-  const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || "http://127.0.0.1:8000";
+  const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || "";
 
   const fetchAuditEvents = async () => {
     setLoading(true);

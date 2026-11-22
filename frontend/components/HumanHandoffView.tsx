@@ -40,7 +40,7 @@ export function HumanHandoffView() {
   const [actionNotes, setActionNotes] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(true);
 
-  const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || "http://127.0.0.1:8000";
+  const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || "";
 
   const fetchRequests = async () => {
     setLoading(true);
