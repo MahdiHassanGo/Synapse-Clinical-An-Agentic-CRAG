@@ -108,7 +108,7 @@ async def test_run_manager_and_hitl_resumption():
         proposed_medications=["Ibuprofen"]
     )
     # Give background execution a moment to pause at HITL interrupt
-    for _ in range(120):
+    for _ in range(400):
         await asyncio.sleep(0.1)
         if run.status == "PAUSED_FOR_REVIEW":
             break

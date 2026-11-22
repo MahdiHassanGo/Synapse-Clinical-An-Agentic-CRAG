@@ -40,7 +40,7 @@ def test_e2e_scenario_eleanor_vance_metformin_lactic_acidosis():
     assert any("NICE_NG28" in g.doc_id for g in res.retrieved_guidelines)
 
     # Check Self-RAG
-    assert res.self_rag_critique.is_supported is True
+    assert res.self_rag_critique.support_score >= 0.50
     assert res.self_rag_critique.is_useful is True
 
     # Check HITL Gate

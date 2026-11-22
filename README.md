@@ -8,6 +8,9 @@
 [![Bilingual Engine](https://img.shields.io/badge/multilingual-English%20%26%20বাংলা-emerald.svg)]()
 [![FlashRank Reranker](https://img.shields.io/badge/reranker-FlashRank%20TinyBERT%20ONNX-amber.svg)]()
 [![Multi-Model LiteLLM](https://img.shields.io/badge/orchestrator-LiteLLM%20Universal-purple.svg)]()
+[![Deploy on Railway](https://railway.com/button.svg)](https://railway.com/new/template?template=https%3A%2F%2Fgithub.com%2FMahdiHassanGo%2FSynapse-Clinical-An-Agentic-CRAG)
+[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/MahdiHassanGo/Synapse-Clinical-An-Agentic-CRAG)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FMahdiHassanGo%2FSynapse-Clinical-An-Agentic-CRAG&root-directory=frontend)
 
 > **Enterprise-Grade Healthcare Intelligence Platform**: A dual-experience AI system featuring a **Public Patient Conversational AI Agent** (bilingual English & Bengali, emergency screening, embeddable widget, human handoff queue) alongside an authenticated **Clinician Copilot** (14-node LangGraph state machine, Corrective RAG, claim-level Self-RAG verification, deterministic calculators, pharmacovigilance contraindications, and regulatory Human-in-the-Loop oversight).
 
@@ -158,12 +161,87 @@ PYTHONPATH=backend .venv/bin/pytest backend/tests -v
 
 ---
 
-## 6. Docker & Container Deployment
+## 6. One-Click Cloud Deployment & Production Hosting
+
+Synapse Clinical v4.1 is containerized and production-ready for zero-downtime deployment across Railway, Render, Vercel, and Docker Compose.
+
+### 6.1 One-Click Deployment Matrix
+
+| Hosting Provider | Architecture | One-Click Template |
+| :--- | :--- | :--- |
+| **Railway** | Full-Stack (FastAPI API + Next.js Frontend + PostgreSQL pgvector) | [![Deploy on Railway](https://railway.com/button.svg)](https://railway.com/new/template?template=https%3A%2F%2Fgithub.com%2FMahdiHassanGo%2FSynapse-Clinical-An-Agentic-CRAG) |
+| **Render** | Multi-Service Blueprint via [`render.yaml`](file:///Users/asif/Documents/04%20Learning%20and%20Coursework/Level%202%20/Synapse%20Clinical/render.yaml) | [![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/MahdiHassanGo/Synapse-Clinical-An-Agentic-CRAG) |
+| **Vercel** | Next.js 15 Standalone Web UI (`frontend/`) | [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FMahdiHassanGo%2FSynapse-Clinical-An-Agentic-CRAG&root-directory=frontend) |
+
+---
+
+### 6.2 Deploying on Railway (Recommended)
+
+Railway provisions both the FastAPI Python backend and the Next.js frontend in a private network alongside PostgreSQL:
+
+1. Click the **[Deploy on Railway](https://railway.com/new/template?template=https%3A%2F%2Fgithub.com%2FMahdiHassanGo%2FSynapse-Clinical-An-Agentic-CRAG)** button above or create a new project from `MahdiHassanGo/Synapse-Clinical-An-Agentic-CRAG`.
+2. **Backend Service**:
+   - Dockerfile: `Dockerfile.backend` (configured automatically via `railway.json`).
+   - Health check: `/health` (timeout: 100s).
+   - Dynamic port binding: Uses Railway's injected `${PORT}`.
+3. **Frontend Service**:
+   - Dockerfile: `Dockerfile.frontend`.
+   - Set environment variable `NEXT_PUBLIC_BACKEND_URL` to your Railway backend URL (e.g. `https://synapse-backend-production.up.railway.app`).
+4. **Environment Variables**:
+   ```env
+   ENVIRONMENT=production
+   DATABASE_URL=postgresql://${PGUSER}:${PGPASSWORD}@${PGHOST}:${PGPORT}/${PGDATABASE}
+   OPENROUTER_API_KEY=sk-or-v1-your-openrouter-key
+   OPENROUTER_CHAT_MODEL=nvidia/nemotron-3-ultra-550b-a55b:free
+   OPENROUTER_FALLBACK_CHAT_MODELS=qwen/qwen3.8-27b:free,google/gemma-4-31b-it:free,openrouter/free
+   OPENROUTER_EMBEDDING_MODEL=nvidia/nemotron-3-embed-1b:free
+   DEFAULT_LLM_PROVIDER=openrouter
+   ```
+
+---
+
+### 6.3 Deploying on Render (Native Blueprint)
+
+This repository includes a native [`render.yaml`](file:///Users/asif/Documents/04%20Learning%20and%20Coursework/Level%202%20/Synapse%20Clinical/render.yaml) specification:
+
+1. Click **[Deploy to Render](https://render.com/deploy?repo=https://github.com/MahdiHassanGo/Synapse-Clinical-An-Agentic-CRAG)**.
+2. Render reads `render.yaml` and deploys:
+   - `synapse-postgres`: Managed PostgreSQL instance.
+   - `synapse-backend`: Dockerized FastAPI web service with `/health` checks.
+   - `synapse-frontend`: Standalone Next.js 15 web client with automatic backend host injection.
+3. Supply your `OPENROUTER_API_KEY` when prompted in the Render Dashboard.
+
+---
+
+### 6.4 Deploying Frontend to Vercel + Backend to Railway / Render
+
+For teams preferring Vercel's global CDN edge for Next.js:
+
+1. Click **[Deploy with Vercel](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FMahdiHassanGo%2FSynapse-Clinical-An-Agentic-CRAG&root-directory=frontend)**.
+2. Set **Root Directory** to `frontend`.
+3. Add the environment variable:
+   ```env
+   NEXT_PUBLIC_BACKEND_URL=https://your-synapse-backend.up.railway.app
+   ```
+4. Deploy the backend to Railway or Render using the instructions in Section 6.2 or 6.3.
+
+---
+
+### 6.5 Production Docker & Local VM Deployment
 
 ```bash
+# Clone the repository
+git clone https://github.com/MahdiHassanGo/Synapse-Clinical-An-Agentic-CRAG.git
+cd Synapse-Clinical-An-Agentic-CRAG
+
+# Configure environment variables
+cp .env.example .env
+# Edit .env with your LLM provider keys
+
 # Build and run backend, frontend, and PostgreSQL + pgvector
 docker-compose up --build -d
 ```
-- Frontend: `http://localhost:3000`
-- Backend API: `http://localhost:8000`
-- Health check: `http://localhost:8000/health`
+- **Next.js Web Client**: `http://localhost:3000`
+- **FastAPI API & Docs**: `http://localhost:8000/docs`
+- **Health check**: `http://localhost:8000/health`
+- **Embeddable Patient Widget**: `http://localhost:8000/widget.js`
