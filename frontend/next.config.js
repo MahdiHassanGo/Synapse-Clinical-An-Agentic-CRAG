@@ -3,7 +3,7 @@ const backendUrl = process.env.BACKEND_INTERNAL_URL || process.env.NEXT_PUBLIC_B
 
 const nextConfig = {
   reactStrictMode: true,
-  output: "standalone",
+  ...(process.env.VERCEL ? {} : { output: "standalone" }),
   async rewrites() {
     return [
       {
