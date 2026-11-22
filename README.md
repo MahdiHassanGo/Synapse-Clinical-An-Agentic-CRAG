@@ -1,5 +1,7 @@
 # Synapse Clinical v4.1 — Multi-Model Agentic RAG Healthcare Platform with Patient Conversational AI
 
+[![Live Demo on Vercel](https://img.shields.io/badge/Vercel-Live%20Demo%20Active-black?style=for-the-badge&logo=vercel)](https://frontend-chi-seven-22.vercel.app)
+
 [![Tests Passing](https://img.shields.io/badge/pytest-56%20passed-10b981.svg)]()
 [![Poteto Pyramid](https://img.shields.io/badge/poteto--pyramid-level%201--3%20verified-0ea5e9.svg)]()
 [![Unslop UI](https://img.shields.io/badge/ui-unslopped%20clinical-14b8a6.svg)]()
@@ -167,11 +169,11 @@ Synapse Clinical v4.1 is containerized and production-ready for zero-downtime de
 
 ### 6.1 One-Click Deployment Matrix
 
-| Hosting Provider | Architecture | One-Click Template |
+| Hosting Provider | Architecture | Live URL / One-Click Template |
 | :--- | :--- | :--- |
+| **Vercel (Live)** | Next.js 15 Standalone Web UI (`frontend/`) | 🔗 **[frontend-chi-seven-22.vercel.app](https://frontend-chi-seven-22.vercel.app)**<br>[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FMahdiHassanGo%2FSynapse-Clinical-An-Agentic-CRAG&root-directory=frontend) |
 | **Railway** | Full-Stack (FastAPI API + Next.js Frontend + PostgreSQL pgvector) | [![Deploy on Railway](https://railway.com/button.svg)](https://railway.com/new/template?template=https%3A%2F%2Fgithub.com%2FMahdiHassanGo%2FSynapse-Clinical-An-Agentic-CRAG) |
 | **Render** | Multi-Service Blueprint via [`render.yaml`](file:///Users/asif/Documents/04%20Learning%20and%20Coursework/Level%202%20/Synapse%20Clinical/render.yaml) | [![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/MahdiHassanGo/Synapse-Clinical-An-Agentic-CRAG) |
-| **Vercel** | Next.js 15 Standalone Web UI (`frontend/`) | [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FMahdiHassanGo%2FSynapse-Clinical-An-Agentic-CRAG&root-directory=frontend) |
 
 ---
 
@@ -213,10 +215,13 @@ This repository includes a native [`render.yaml`](file:///Users/asif/Documents/0
 
 ---
 
-### 6.4 Deploying Frontend to Vercel + Backend to Railway / Render
+### 6.4 Live Vercel Deployment
 
-For teams preferring Vercel's global CDN edge for Next.js:
+The Next.js 15 frontend is deployed live on Vercel at:
+- **Production URL**: **[https://frontend-chi-seven-22.vercel.app](https://frontend-chi-seven-22.vercel.app)**
+- **Vercel Project**: `asif-s-projects1/frontend` (Linked to `MahdiHassanGo/Synapse-Clinical-An-Agentic-CRAG`)
 
+To configure or deploy your own Vercel instance:
 1. Click **[Deploy with Vercel](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FMahdiHassanGo%2FSynapse-Clinical-An-Agentic-CRAG&root-directory=frontend)**.
 2. Set **Root Directory** to `frontend`.
 3. Add the environment variable:
