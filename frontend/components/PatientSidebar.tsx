@@ -63,7 +63,7 @@ export function PatientSidebar({
   loading,
 }: PatientSidebarProps) {
   return (
-    <aside className="w-80 border-r border-white/[0.08] bg-graphite-900/60 flex flex-col h-[calc(100vh-3.5rem)] overflow-hidden">
+    <aside className="w-full lg:w-80 xl:w-[340px] border-b lg:border-b-0 lg:border-r border-white/[0.08] bg-graphite-900/60 flex flex-col max-h-[44vh] lg:max-h-none lg:h-[calc(100vh-3.5rem)] overflow-hidden shrink-0">
       {/* Patient Cohort Selector */}
       <div className="p-4 border-b border-white/[0.08]">
         <div className="flex items-center justify-between mb-2">

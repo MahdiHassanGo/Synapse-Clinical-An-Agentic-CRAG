@@ -349,13 +349,13 @@ export function FloatingChatWidget() {
                     ? "উপসর্গ লিখুন (যেমন: বুকে ব্যথা, মাইগ্রেন, ত্বকে ফুসকুড়ি)…"
                     : "Describe symptoms (e.g., chest pain, migraine, skin rash)…"
                 }
-                rows={1}
-                className="flex-1 max-h-24 min-h-9 resize-none rounded-xl bg-graphite-950 border border-white/[0.08] px-3 py-2 text-xs text-white placeholder-graphite-500 outline-none focus:border-clinical-blue transition-all"
+                rows={2}
+                className="flex-1 max-h-28 min-h-[44px] resize-none rounded-xl bg-graphite-950 border border-white/[0.1] px-3 py-2.5 text-xs leading-snug text-white placeholder-graphite-400 outline-none focus:border-clinical-blue transition-colors"
               />
               <button
                 type="submit"
                 disabled={!input.trim() || isSending}
-                className="size-9 shrink-0 rounded-xl bg-clinical-blue hover:bg-clinical-blue/90 disabled:opacity-40 text-white flex items-center justify-center transition-all shadow-sm focus:outline-none"
+                className="w-11 h-11 shrink-0 rounded-xl bg-clinical-blue hover:bg-clinical-blue/90 disabled:opacity-40 text-white flex items-center justify-center transition-colors shadow-sm cursor-pointer"
                 aria-label="Send query"
               >
                 <Send className="w-3.5 h-3.5" />
