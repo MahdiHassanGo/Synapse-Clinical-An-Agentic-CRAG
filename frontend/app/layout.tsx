@@ -1,10 +1,17 @@
 import type { Metadata } from "next";
-import { Inter, JetBrains_Mono } from "next/font/google";
+import { Figtree, Noto_Sans, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 
-const inter = Inter({
+const figtree = Figtree({
   subsets: ["latin"],
   variable: "--font-sans",
+  display: "swap",
+});
+
+const notoSans = Noto_Sans({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-noto",
   display: "swap",
 });
 
@@ -15,9 +22,9 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Synapse Clinical — Agentic Clinical Intelligence & Decision Support",
+  title: "Synapse Clinical — Clinical Intelligence & Decision Support",
   description:
-    "Autonomous Agentic RAG clinical decision support with CRAG, Self-RAG, and deterministic pharmacovigilance safety gates.",
+    "Clinical decision support workspace with Corrective RAG, claim-level verification, and deterministic pharmacovigilance safety gates.",
 };
 
 export default function RootLayout({
@@ -26,8 +33,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`dark ${inter.variable} ${jetbrainsMono.variable}`}>
-      <body className="bg-graphite-950 text-graphite-100 font-sans min-h-screen antialiased selection:bg-clinical-blue/25 selection:text-white">
+    <html lang="en" className={`${figtree.variable} ${notoSans.variable} ${jetbrainsMono.variable}`}>
+      <body className="bg-canvas text-ink font-sans min-h-screen antialiased selection:bg-accent-soft selection:text-accent">
         {children}
       </body>
     </html>

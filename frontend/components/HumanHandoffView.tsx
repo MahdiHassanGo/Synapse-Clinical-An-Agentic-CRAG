@@ -111,70 +111,73 @@ export function HumanHandoffView() {
   const getUrgencyBadge = (urgency: string) => {
     switch (urgency) {
       case "CRITICAL":
-        return "bg-rose-500/20 text-rose-300 border-rose-500/40";
+        return "bg-red-50 text-clinical-rose border-red-200";
       case "HIGH":
-        return "bg-amber-500/20 text-amber-300 border-amber-500/40";
+        return "bg-amber-50 text-clinical-amber border-amber-200";
       case "MEDIUM":
-        return "bg-sky-500/20 text-sky-300 border-sky-500/40";
+        return "bg-blue-50 text-clinical-blue border-blue-200";
       default:
-        return "bg-graphite-700 text-graphite-300 border-graphite-600";
+        return "bg-subtle text-ink-secondary border-hairline";
     }
   };
 
   const getStatusBadge = (status: string) => {
     switch (status) {
       case "RESOLVED":
-        return "bg-emerald-500/10 text-emerald-400 border-emerald-500/20";
+        return "bg-emerald-50 text-clinical-emerald border-emerald-200";
       case "ASSIGNED":
       case "IN_REVIEW":
-        return "bg-sky-500/10 text-sky-400 border-sky-500/20";
+        return "bg-accent-soft text-accent border-accent-border";
       case "CANCELLED":
-        return "bg-graphite-800 text-graphite-400 border-white/[0.06]";
+        return "bg-subtle text-ink-muted border-hairline";
       default:
-        return "bg-amber-500/10 text-amber-400 border-amber-500/20";
+        return "bg-amber-50 text-clinical-amber border-amber-200";
     }
   };
 
   return (
-    <div className="flex-1 flex overflow-hidden bg-graphite-950 text-white select-none">
+    <div className="flex-1 flex flex-col lg:flex-row overflow-hidden bg-canvas text-ink">
       {/* Left Column: Tickets Queue */}
-      <div className="w-1/2 border-r border-white/[0.08] flex flex-col">
+      <div className="w-full lg:w-1/2 border-b lg:border-b-0 lg:border-r border-hairline flex flex-col max-h-[50vh] lg:max-h-none">
         {/* Header */}
-        <div className="p-4 border-b border-white/[0.08] bg-graphite-900/90 space-y-3">
+        <div className="p-4 border-b border-hairline bg-surface space-y-3">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2.5">
-              <div className="w-8 h-8 rounded-lg bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-400">
+              <div className="w-8 h-8 rounded-lg bg-amber-50 border border-amber-200 flex items-center justify-center text-clinical-amber">
                 <AlertTriangle className="w-4 h-4" />
               </div>
               <div>
-                <h2 className="text-xs font-semibold text-white">Human Support & Triage Escalation Queue</h2>
-                <div className="text-[11px] text-graphite-400">Clinic Staff Ticket Management</div>
+                <h2 className="text-xs font-semibold text-ink">Human Support &amp; Triage Escalation Queue</h2>
+                <div className="text-xs text-ink-muted">Clinic staff ticket management</div>
               </div>
             </div>
             <button
+              type="button"
               onClick={fetchRequests}
-              className="p-1.5 rounded-lg bg-graphite-800 hover:bg-graphite-700 text-graphite-300 border border-white/[0.08] text-xs transition-all"
+              aria-label="Refresh escalation queue"
+              className="p-2 rounded-lg bg-subtle hover:bg-muted text-ink-secondary border border-hairline text-xs transition-colors cursor-pointer"
             >
               <RefreshCw className="w-3.5 h-3.5" />
             </button>
           </div>
 
           {/* Search & Filters */}
-          <div className="flex items-center gap-2">
-            <div className="flex-1 relative">
-              <Search className="w-3.5 h-3.5 text-graphite-400 absolute left-2.5 top-2.5" />
+          <div className="flex flex-wrap items-center gap-2">
+            <div className="flex-1 min-w-[180px] relative">
+              <Search className="w-3.5 h-3.5 text-ink-muted absolute left-2.5 top-2.5" />
               <input
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search patient, symptoms, or inquiry..."
-                className="w-full bg-graphite-950 border border-white/[0.08] rounded-lg pl-8 pr-3 py-1.5 text-xs text-white placeholder-graphite-500 outline-none"
+                className="w-full bg-subtle border border-hairline rounded-lg pl-8 pr-3 py-1.5 text-xs text-ink placeholder-ink-muted outline-none focus:border-accent"
               />
             </div>
             <select
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
-              className="bg-graphite-800 text-xs text-graphite-300 border border-white/[0.08] rounded-lg px-2 py-1.5 font-mono outline-none"
+              aria-label="Filter by status"
+              className="bg-subtle text-xs text-ink-secondary border border-hairline rounded-lg px-2.5 py-1.5 font-mono outline-none focus:border-accent"
             >
               <option value="ALL">All Statuses</option>
               <option value="REQUESTED">Requested</option>
@@ -185,7 +188,8 @@ export function HumanHandoffView() {
             <select
               value={urgencyFilter}
               onChange={(e) => setUrgencyFilter(e.target.value)}
-              className="bg-graphite-800 text-xs text-graphite-300 border border-white/[0.08] rounded-lg px-2 py-1.5 font-mono outline-none"
+              aria-label="Filter by urgency"
+              className="bg-subtle text-xs text-ink-secondary border border-hairline rounded-lg px-2.5 py-1.5 font-mono outline-none focus:border-accent"
             >
               <option value="ALL">All Urgencies</option>
               <option value="CRITICAL">Critical</option>
@@ -198,158 +202,161 @@ export function HumanHandoffView() {
         {/* Tickets List */}
         <div className="flex-1 overflow-y-auto p-3 space-y-2">
           {loading && (
-            <div className="p-8 text-center text-xs text-graphite-400">Loading escalation tickets...</div>
+            <div className="p-8 text-center text-xs text-ink-muted">Loading escalation tickets...</div>
           )}
           {!loading && filteredRequests.length === 0 && (
-            <div className="p-8 text-center text-xs text-graphite-400 space-y-1">
+            <div className="p-8 text-center text-xs text-ink-muted space-y-1">
               <div>No escalation requests matching criteria.</div>
-              <div className="text-[11px] text-graphite-500">All patient inquiries resolved or handled.</div>
+              <div className="text-[11px]">All patient inquiries resolved or handled.</div>
             </div>
           )}
           {filteredRequests.map((req) => {
             const isSelected = selectedRequest?.request_id === req.request_id;
             return (
-              <div
+              <button
                 key={req.request_id}
+                type="button"
                 onClick={() => setSelectedRequest(req)}
-                className={`p-3.5 rounded-xl border transition-all cursor-pointer space-y-2 ${
+                className={`w-full text-left p-3.5 rounded-xl border transition-colors cursor-pointer space-y-2 ${
                   isSelected
-                    ? "bg-graphite-850 border-clinical-blue/50 shadow-md"
-                    : "bg-graphite-900 hover:bg-graphite-850 border-white/[0.06]"
+                    ? "bg-accent-soft/60 border-accent-border border-l-4 border-l-accent"
+                    : "bg-surface hover:bg-subtle border-hairline"
                 }`}
               >
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <span className="text-xs font-mono font-semibold text-white">{req.request_id}</span>
-                    <span className={`text-[9px] px-1.5 py-0.2 rounded border font-mono ${getUrgencyBadge(req.urgency)}`}>
+                <div className="flex flex-wrap items-center justify-between gap-2">
+                  <div className="flex items-center gap-1.5">
+                    <span className="text-xs font-mono font-semibold text-ink">{req.request_id}</span>
+                    <span className={`text-[10px] px-1.5 py-0.5 rounded border font-mono ${getUrgencyBadge(req.urgency)}`}>
                       {req.urgency}
                     </span>
-                    <span className={`text-[9px] px-1.5 py-0.2 rounded border font-mono ${getStatusBadge(req.status)}`}>
+                    <span className={`text-[10px] px-1.5 py-0.5 rounded border font-mono ${getStatusBadge(req.status)}`}>
                       {req.status}
                     </span>
                   </div>
-                  <span className="text-[10px] text-graphite-400 font-mono">{req.created_at}</span>
+                  <span className="text-[11px] text-ink-muted font-mono">{req.created_at}</span>
                 </div>
 
-                <div className="text-xs font-medium text-graphite-200 line-clamp-2">
-                  "{req.user_query}"
+                <div className="text-xs font-medium text-ink-secondary line-clamp-2">
+                  &ldquo;{req.user_query}&rdquo;
                 </div>
 
-                <div className="flex items-center justify-between text-[11px] text-graphite-400 border-t border-white/[0.04] pt-2">
-                  <span>Patient: <strong className="text-graphite-300">{req.patient_name || "Anonymous"}</strong></span>
+                <div className="flex items-center justify-between text-[11px] text-ink-muted border-t border-hairline pt-2">
+                  <span>Patient: <strong className="text-ink">{req.patient_name || "Anonymous"}</strong></span>
                   <span>{req.assigned_to ? `Assigned: ${req.assigned_to}` : "Unassigned"}</span>
                 </div>
-              </div>
+              </button>
             );
           })}
         </div>
       </div>
 
       {/* Right Column: Ticket Inspection & Actions */}
-      <div className="w-1/2 p-6 flex flex-col justify-between overflow-y-auto space-y-6">
+      <div className="w-full lg:w-1/2 p-4 sm:p-6 flex flex-col justify-between overflow-y-auto space-y-6">
         {selectedRequest ? (
-          <div className="space-y-6">
-            <div className="flex items-center justify-between border-b border-white/[0.08] pb-4">
+          <div className="space-y-5">
+            <div className="flex flex-wrap items-center justify-between gap-2 border-b border-hairline pb-4">
               <div>
                 <div className="flex items-center gap-2">
-                  <h3 className="text-sm font-bold text-white font-mono">{selectedRequest.request_id}</h3>
-                  <span className={`text-[10px] px-2 py-0.5 rounded border font-mono ${getUrgencyBadge(selectedRequest.urgency)}`}>
+                  <h3 className="text-sm font-semibold text-ink font-mono">{selectedRequest.request_id}</h3>
+                  <span className={`text-[11px] px-2 py-0.5 rounded border font-mono ${getUrgencyBadge(selectedRequest.urgency)}`}>
                     {selectedRequest.urgency}
                   </span>
                 </div>
-                <div className="text-xs text-graphite-400 mt-1">Tenant: {selectedRequest.tenant_id}</div>
+                <div className="text-xs text-ink-muted mt-1">Tenant: {selectedRequest.tenant_id}</div>
               </div>
               <div className="text-right">
                 <span className={`text-xs px-2.5 py-1 rounded border font-mono ${getStatusBadge(selectedRequest.status)}`}>
                   {selectedRequest.status}
                 </span>
-                <div className="text-[10px] text-graphite-400 mt-1 font-mono">Logged: {selectedRequest.created_at}</div>
+                <div className="text-[11px] text-ink-muted mt-1 font-mono">Logged: {selectedRequest.created_at}</div>
               </div>
             </div>
 
-            {/* Patient Context */}
-            <div className="p-4 rounded-xl bg-graphite-900 border border-white/[0.06] space-y-2">
-              <div className="text-xs font-semibold text-white">Patient Context</div>
-              <div className="grid grid-cols-2 gap-2 text-xs">
+            <div className="p-4 rounded-xl bg-surface border border-hairline space-y-2.5">
+              <div className="text-xs font-semibold text-ink">Patient Context</div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
                 <div>
-                  <span className="text-graphite-400">Name: </span>
-                  <span className="text-white font-medium">{selectedRequest.patient_name || "Anonymous Visitor"}</span>
+                  <span className="text-ink-muted">Name: </span>
+                  <span className="text-ink font-medium">{selectedRequest.patient_name || "Anonymous Visitor"}</span>
                 </div>
                 <div>
-                  <span className="text-graphite-400">Patient ID: </span>
-                  <span className="text-white font-mono">{selectedRequest.patient_id || "Unauthenticated"}</span>
+                  <span className="text-ink-muted">Patient ID: </span>
+                  <span className="text-ink font-mono">{selectedRequest.patient_id || "Unauthenticated"}</span>
                 </div>
                 <div>
-                  <span className="text-graphite-400">Session ID: </span>
-                  <span className="text-white font-mono text-[11px]">{selectedRequest.session_id}</span>
+                  <span className="text-ink-muted">Session ID: </span>
+                  <span className="text-ink-secondary font-mono text-[11px]">{selectedRequest.session_id}</span>
                 </div>
                 <div>
-                  <span className="text-graphite-400">Assigned To: </span>
-                  <span className="text-sky-300 font-medium">{selectedRequest.assigned_to || "None"}</span>
+                  <span className="text-ink-muted">Assigned To: </span>
+                  <span className="text-accent font-medium">{selectedRequest.assigned_to || "None"}</span>
                 </div>
               </div>
             </div>
 
-            {/* Inquired Query & Trigger Reason */}
-            <div className="p-4 rounded-xl bg-graphite-900 border border-white/[0.06] space-y-2">
-              <div className="text-xs font-semibold text-white">Patient Inquiry & Escalation Reason</div>
-              <div className="p-3 rounded-lg bg-graphite-950 border border-white/[0.04] text-xs text-graphite-200 italic">
-                "{selectedRequest.user_query}"
+            <div className="p-4 rounded-xl bg-surface border border-hairline space-y-2">
+              <div className="text-xs font-semibold text-ink">Patient Inquiry &amp; Escalation Reason</div>
+              <div className="p-3 rounded-lg bg-subtle border border-hairline text-xs text-ink">
+                &ldquo;{selectedRequest.user_query}&rdquo;
               </div>
-              <div className="text-xs text-graphite-300">
-                <strong>Reason:</strong> {selectedRequest.reason}
+              <div className="text-xs text-ink-secondary">
+                <strong className="text-ink">Reason:</strong> {selectedRequest.reason}
               </div>
             </div>
 
-            {/* Actions: Assign & Status Progression */}
-            <div className="p-4 rounded-xl bg-graphite-900 border border-white/[0.06] space-y-3">
-              <div className="text-xs font-semibold text-white">Clinical Triage Actions</div>
-              
-              <div className="flex items-center gap-2">
+            <div className="p-4 rounded-xl bg-surface border border-hairline space-y-3">
+              <div className="text-xs font-semibold text-ink">Clinical Triage Actions</div>
+
+              <div className="flex flex-wrap items-center gap-2">
                 <select
                   value={assigneeName}
                   onChange={(e) => setAssigneeName(e.target.value)}
-                  className="flex-1 bg-graphite-950 border border-white/[0.08] rounded-lg px-3 py-2 text-xs text-white outline-none"
+                  aria-label="Assign clinician"
+                  className="flex-1 min-w-[200px] bg-subtle border border-strong rounded-lg px-3 py-2 text-xs text-ink outline-none focus:border-accent"
                 >
                   <option value="Nurse Sarah Jenkins, RN">Nurse Sarah Jenkins, RN (Triage)</option>
                   <option value="Dr. Marcus Bell, MD">Dr. Marcus Bell, MD (Internal Med)</option>
                   <option value="Clinical Pharmacist David Chen, PharmD">David Chen, PharmD (Pharmacy)</option>
                 </select>
                 <button
+                  type="button"
                   onClick={() => handleAssign(selectedRequest.request_id)}
-                  className="px-3 py-2 rounded-lg bg-clinical-blue hover:bg-clinical-blue/90 text-xs font-medium text-white transition-all shadow-md"
+                  className="px-3.5 py-2 rounded-lg bg-accent hover:bg-accent-hover text-xs font-semibold text-white transition-colors cursor-pointer"
                 >
                   Assign Staff
                 </button>
               </div>
 
               <div>
-                <label className="text-[11px] text-graphite-400 font-mono">Clinical Note / Resolution Summary</label>
+                <label className="text-xs font-medium text-ink-secondary">Clinical Note / Resolution Summary</label>
                 <textarea
                   value={actionNotes}
                   onChange={(e) => setActionNotes(e.target.value)}
                   rows={2}
                   placeholder="Record call details, medication counseling, or ER referral instructions..."
-                  className="w-full mt-1 bg-graphite-950 border border-white/[0.08] rounded-lg p-2.5 text-xs text-white placeholder-graphite-500 outline-none"
+                  className="w-full mt-1 bg-subtle border border-strong rounded-lg p-2.5 text-xs text-ink placeholder-ink-muted outline-none focus:border-accent"
                 />
               </div>
 
-              <div className="flex flex-wrap gap-2 pt-2 border-t border-white/[0.06]">
+              <div className="flex flex-wrap gap-2 pt-2 border-t border-hairline">
                 <button
+                  type="button"
                   onClick={() => handleUpdateStatus(selectedRequest.request_id, "IN_REVIEW")}
-                  className="px-3 py-1.5 rounded-lg bg-graphite-800 hover:bg-graphite-700 text-xs text-graphite-200 border border-white/[0.08]"
+                  className="px-3 py-1.5 rounded-lg bg-subtle hover:bg-muted text-xs text-ink-secondary border border-hairline cursor-pointer"
                 >
                   Mark In Review
                 </button>
                 <button
+                  type="button"
                   onClick={() => handleUpdateStatus(selectedRequest.request_id, "RESOLVED")}
-                  className="px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-xs font-medium text-white shadow-md"
+                  className="px-3 py-1.5 rounded-lg bg-clinical-emerald hover:opacity-90 text-xs font-semibold text-white cursor-pointer"
                 >
                   Mark Resolved
                 </button>
                 <button
+                  type="button"
                   onClick={() => handleUpdateStatus(selectedRequest.request_id, "CANCELLED")}
-                  className="px-3 py-1.5 rounded-lg bg-graphite-800 hover:bg-rose-900/40 text-xs text-graphite-400 hover:text-rose-300 border border-white/[0.08]"
+                  className="px-3 py-1.5 rounded-lg bg-subtle hover:bg-red-50 text-xs text-ink-muted hover:text-clinical-rose border border-hairline cursor-pointer"
                 >
                   Dismiss / Cancel
                 </button>
@@ -357,7 +364,7 @@ export function HumanHandoffView() {
             </div>
           </div>
         ) : (
-          <div className="p-12 text-center text-xs text-graphite-400">
+          <div className="p-12 text-center text-xs text-ink-muted">
             Select an escalation request from the queue to inspect details and assign staff.
           </div>
         )}

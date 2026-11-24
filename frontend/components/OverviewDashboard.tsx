@@ -2,19 +2,12 @@
 
 import React, { useState, useEffect } from "react";
 import {
-  Activity,
   MessageSquare,
   Stethoscope,
-  Database,
-  Building2,
-  Users,
+  ArrowRight,
+  AlertTriangle,
   ShieldCheck,
   Zap,
-  ArrowRight,
-  TrendingUp,
-  AlertTriangle,
-  Globe,
-  Sliders
 } from "lucide-react";
 import { NavView } from "./Header";
 
@@ -25,11 +18,10 @@ interface OverviewDashboardProps {
 
 export function OverviewDashboard({ onSelectView, onLaunchScenario }: OverviewDashboardProps) {
   const [analytics, setAnalytics] = useState<any>({
-    total_sessions: 52,
-    total_messages: 214,
-    escalation_rate_pct: 3.8,
-    average_latency_ms: 320,
-    language_distribution: { en: 34, bn: 18 }
+    active_sessions: 42,
+    total_messages: 384,
+    emergency_redirects: 14,
+    avg_latency_ms: 38.2,
   });
 
   const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || "";
@@ -42,255 +34,273 @@ export function OverviewDashboard({ onSelectView, onLaunchScenario }: OverviewDa
   }, [BACKEND_URL]);
 
   return (
-    <div className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-6 bg-graphite-950 text-white max-w-7xl mx-auto w-full">
-      {/* Banner */}
-      <section aria-label="Platform overview" className="p-5 sm:p-7 rounded-2xl bg-graphite-900 border border-white/[0.08] shadow-xl relative overflow-hidden">
-        <div className="absolute right-0 top-0 bottom-0 w-1/3 bg-gradient-to-l from-clinical-blue/[0.08] to-transparent pointer-events-none" />
-        <div className="relative z-10 max-w-3xl space-y-3.5">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-clinical-blue/10 text-clinical-blue border border-clinical-blue/25 text-xs font-mono">
-            <Activity className="w-3.5 h-3.5" aria-hidden="true" />
-            <span>Synapse Clinical v4.1 — Clinical Intelligence Platform</span>
+    <div className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 space-y-6 bg-canvas text-ink max-w-7xl mx-auto w-full">
+      {/* Primary Clinical Summary Header Card */}
+      <section
+        aria-label="Platform overview"
+        className="p-6 sm:p-8 rounded-xl bg-surface border border-hairline border-l-4 border-l-accent"
+      >
+        <div className="max-w-3xl space-y-4">
+          <div className="inline-flex items-center gap-2 text-xs font-mono text-accent font-medium">
+            <ShieldCheck className="w-4 h-4" aria-hidden="true" />
+            <span>Synapse Clinical v4.1 · Dual-boundary medical AI architecture</span>
           </div>
-          <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-white">
-            Dual AI Experience: Patient Conversational Agent &amp; Clinician Copilot
+          <h1 className="text-2xl sm:text-3xl font-semibold tracking-tight text-ink leading-tight">
+            Patient conversational triage and clinician decision support
           </h1>
-          <p className="text-sm text-graphite-300 leading-relaxed max-w-2xl">
-            Enterprise healthcare intelligence powered by multi-model agentic RAG, deterministic safety guards,
-            bilingual English &amp; Bengali patient navigation, and strict regulatory isolation between public inquiries
-            and confidential electronic health records.
+          <p className="text-sm text-ink-secondary leading-relaxed max-w-2xl">
+            Built with strict regulatory isolation between public patient guidance (bilingual English and Bengali)
+            and authenticated electronic health record decision support powered by Corrective RAG, claim-level
+            entailment verification, and deterministic pharmacovigilance gates.
           </p>
           <div className="flex flex-wrap items-center gap-3 pt-1">
             <button
               type="button"
-              onClick={() => onSelectView("patient-agent")}
-              className="min-h-[40px] flex items-center gap-2 px-4 py-2 rounded-xl bg-clinical-blue hover:bg-clinical-blue/90 text-white font-semibold text-xs transition-colors shadow-md cursor-pointer"
-            >
-              <MessageSquare className="w-4 h-4" />
-              <span>Launch Patient Chat Demo</span>
-            </button>
-            <button
-              type="button"
               onClick={() => onSelectView("workspace")}
-              className="min-h-[40px] flex items-center gap-2 px-4 py-2 rounded-xl bg-graphite-800 hover:bg-graphite-750 text-white border border-white/[0.12] font-medium text-xs transition-colors cursor-pointer"
+              className="min-h-[40px] flex items-center gap-2 px-4 py-2 rounded-lg bg-accent hover:bg-accent-hover text-white font-medium text-xs transition-colors cursor-pointer"
             >
-              <Stethoscope className="w-4 h-4 text-clinical-blue" />
+              <Stethoscope className="w-4 h-4" />
               <span>Open Clinician Copilot</span>
             </button>
             <button
               type="button"
-              onClick={() => onSelectView("handoff")}
-              className="min-h-[40px] flex items-center gap-2 px-4 py-2 rounded-xl bg-graphite-850 hover:bg-graphite-800 text-graphite-200 border border-white/[0.08] text-xs font-medium transition-colors cursor-pointer"
+              onClick={() => onSelectView("patient-agent")}
+              className="min-h-[40px] flex items-center gap-2 px-4 py-2 rounded-lg bg-surface hover:bg-subtle text-ink border border-strong font-medium text-xs transition-colors cursor-pointer"
             >
-              <AlertTriangle className="w-3.5 h-3.5 text-amber-400" />
+              <MessageSquare className="w-4 h-4 text-accent" />
+              <span>Launch Patient Chat Demo</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => onSelectView("handoff")}
+              className="min-h-[40px] flex items-center gap-2 px-3.5 py-2 rounded-lg text-ink-secondary hover:text-ink hover:bg-subtle text-xs font-medium transition-colors cursor-pointer"
+            >
+              <AlertTriangle className="w-3.5 h-3.5 text-clinical-amber" />
               <span>Triage Escalations</span>
             </button>
           </div>
         </div>
       </section>
 
-      {/* KPI Stats Grid */}
+      {/* Telemetry Row — Pure Numbers, No Decorative Mini-Charts */}
       <section aria-label="Key telemetry metrics" className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
-        <div className="p-4 rounded-xl bg-graphite-900 border border-white/[0.07] space-y-1.5">
-          <div className="text-[11px] font-mono text-graphite-400 uppercase tracking-wider">Patient Sessions</div>
-          <div className="text-2xl font-bold font-mono text-white tabular-nums">{analytics.active_sessions ?? analytics.total_sessions ?? 42}</div>
-          <div className="text-[11px] text-emerald-400 flex items-center gap-1 font-mono">
-            <TrendingUp className="w-3 h-3" aria-hidden="true" /> Live cohort
+        <div className="p-4 rounded-xl bg-surface border border-hairline space-y-1">
+          <div className="text-xs text-ink-muted">Patient sessions</div>
+          <div className="text-2xl font-semibold font-mono text-ink tabular-nums">
+            {analytics.active_sessions ?? analytics.total_sessions ?? 42}
           </div>
+          <div className="text-[11px] text-clinical-emerald font-mono">Active cohort</div>
         </div>
 
-        <div className="p-4 rounded-xl bg-graphite-900 border border-white/[0.07] space-y-1.5">
-          <div className="text-[11px] font-mono text-graphite-400 uppercase tracking-wider">Total Messages</div>
-          <div className="text-2xl font-bold font-mono text-white tabular-nums">{analytics.total_messages ?? 384}</div>
-          <div className="text-[11px] text-graphite-400 font-mono">Bilingual EN &amp; BN</div>
+        <div className="p-4 rounded-xl bg-surface border border-hairline space-y-1">
+          <div className="text-xs text-ink-muted">Total messages</div>
+          <div className="text-2xl font-semibold font-mono text-ink tabular-nums">
+            {analytics.total_messages ?? 384}
+          </div>
+          <div className="text-[11px] text-ink-muted font-mono">EN &amp; বাংলা</div>
         </div>
 
-        <div className="p-4 rounded-xl bg-graphite-900 border border-white/[0.07] space-y-1.5">
-          <div className="text-[11px] font-mono text-graphite-400 uppercase tracking-wider">Escalations</div>
-          <div className="text-2xl font-bold font-mono text-amber-400 tabular-nums">
+        <div className="p-4 rounded-xl bg-surface border border-hairline space-y-1">
+          <div className="text-xs text-ink-muted">Escalations</div>
+          <div className="text-2xl font-semibold font-mono text-clinical-amber tabular-nums">
             {analytics.emergency_redirects ?? analytics.escalation_rate_pct ?? 14}
           </div>
-          <div className="text-[11px] text-graphite-400 font-mono">Routed to triage</div>
+          <div className="text-[11px] text-ink-muted font-mono">Human triage</div>
         </div>
 
-        <div className="p-4 rounded-xl bg-graphite-900 border border-white/[0.07] space-y-1.5">
-          <div className="text-[11px] font-mono text-graphite-400 uppercase tracking-wider">Avg Latency</div>
-          <div className="text-2xl font-bold font-mono text-clinical-blue tabular-nums">
+        <div className="p-4 rounded-xl bg-surface border border-hairline space-y-1">
+          <div className="text-xs text-ink-muted">Avg latency</div>
+          <div className="text-2xl font-semibold font-mono text-accent tabular-nums">
             {Math.round(analytics.avg_latency_ms ?? analytics.average_latency_ms ?? 38)}ms
           </div>
-          <div className="text-[11px] text-emerald-400 font-mono">FlashRank reranked</div>
+          <div className="text-[11px] text-clinical-emerald font-mono">FlashRank ONNX</div>
         </div>
 
-        <div className="p-4 rounded-xl bg-graphite-900 border border-white/[0.07] space-y-1.5">
-          <div className="text-[11px] font-mono text-graphite-400 uppercase tracking-wider">Active Tenants</div>
-          <div className="text-2xl font-bold font-mono text-white tabular-nums">2</div>
-          <div className="text-[11px] text-graphite-400 font-mono">US &amp; BD Clinics</div>
+        <div className="p-4 rounded-xl bg-surface border border-hairline space-y-1">
+          <div className="text-xs text-ink-muted">Active tenants</div>
+          <div className="text-2xl font-semibold font-mono text-ink tabular-nums">2</div>
+          <div className="text-[11px] text-ink-muted font-mono">US &amp; BD clinics</div>
         </div>
 
-        <div className="p-4 rounded-xl bg-graphite-900 border border-white/[0.07] space-y-1.5">
-          <div className="text-[11px] font-mono text-graphite-400 uppercase tracking-wider">Safety Policy</div>
-          <div className="text-2xl font-bold font-mono text-emerald-400 tabular-nums">100%</div>
-          <div className="text-[11px] text-graphite-400 font-mono">Strict zero-prescribing</div>
+        <div className="p-4 rounded-xl bg-surface border border-hairline space-y-1">
+          <div className="text-xs text-ink-muted">Safety policy</div>
+          <div className="text-2xl font-semibold font-mono text-clinical-emerald tabular-nums">100%</div>
+          <div className="text-[11px] text-ink-muted font-mono">Zero prescribing</div>
         </div>
       </section>
 
-      {/* Dual Experience Architecture Cards */}
+      {/* Dual Architecture Summary */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {/* Patient Experience Card */}
-        <div className="p-5 rounded-2xl bg-graphite-900/90 border border-white/[0.08] space-y-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2.5">
-              <div className="w-8 h-8 rounded-lg bg-sky-500/10 border border-sky-500/20 flex items-center justify-center text-sky-400">
-                <MessageSquare className="w-4 h-4" />
+        {/* Patient Experience */}
+        <div className="p-6 rounded-xl bg-surface border border-hairline flex flex-col justify-between space-y-4">
+          <div className="space-y-4">
+            <div className="flex items-start justify-between gap-2">
+              <div className="flex items-center gap-3">
+                <div className="w-9 h-9 rounded-lg bg-accent-soft border border-accent-border flex items-center justify-center text-accent shrink-0">
+                  <MessageSquare className="w-4 h-4" />
+                </div>
+                <div>
+                  <h2 className="text-sm font-semibold text-ink">Patient Conversational AI</h2>
+                  <p className="text-xs text-ink-muted">Public website navigator &amp; embeddable widget</p>
+                </div>
               </div>
-              <div>
-                <h3 className="text-sm font-semibold text-white">Patient Conversational AI</h3>
-                <p className="text-[11px] text-graphite-400">Public Website Chatbot & Embeddable Widget</p>
-              </div>
+              <span className="text-[11px] px-2 py-0.5 rounded-md bg-emerald-50 text-clinical-emerald border border-emerald-200 font-mono">
+                Isolated
+              </span>
             </div>
-            <span className="text-[10px] px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-mono">
-              Live & Isolated
-            </span>
+
+            <ul className="space-y-2 text-xs text-ink-secondary leading-relaxed">
+              <li className="flex items-start gap-2">
+                <span className="w-1.5 h-1.5 rounded-full bg-accent mt-1.5 shrink-0" aria-hidden="true" />
+                <span><strong className="text-ink font-medium">Bilingual English &amp; বাংলা:</strong> Deterministic language detection with localized medical guidance.</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <span className="w-1.5 h-1.5 rounded-full bg-accent mt-1.5 shrink-0" aria-hidden="true" />
+                <span><strong className="text-ink font-medium">Red-flag screening:</strong> Detects chest pain, stroke, or respiratory distress and surfaces 911 / 999 guidance.</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <span className="w-1.5 h-1.5 rounded-full bg-accent mt-1.5 shrink-0" aria-hidden="true" />
+                <span><strong className="text-ink font-medium">Non-diagnostic guard:</strong> Never prescribes, alters dosages, or mutates EHR state.</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <span className="w-1.5 h-1.5 rounded-full bg-accent mt-1.5 shrink-0" aria-hidden="true" />
+                <span><strong className="text-ink font-medium">Embeddable widget:</strong> One-line <code className="text-accent font-mono">widget.js</code> script tag integration.</span>
+              </li>
+            </ul>
           </div>
-          <ul className="space-y-2 text-xs text-graphite-300">
-            <li className="flex items-start gap-2">
-              <div className="w-1.5 h-1.5 rounded-full bg-sky-400 mt-1.5" />
-              <span><strong>Bilingual English & বাংলা:</strong> Deterministic language detection with localized medical health guidelines.</span>
-            </li>
-            <li className="flex items-start gap-2">
-              <div className="w-1.5 h-1.5 rounded-full bg-sky-400 mt-1.5" />
-              <span><strong>Red-Flag Emergency Screening:</strong> Detects acute chest pain, stroke, or respiratory distress and dispatches immediate 911 / 999 hotline guidance.</span>
-            </li>
-            <li className="flex items-start gap-2">
-              <div className="w-1.5 h-1.5 rounded-full bg-sky-400 mt-1.5" />
-              <span><strong>Strict Non-Diagnostic Guard:</strong> Never prescribes, alters dosages, or fabricates clinical conclusions.</span>
-            </li>
-            <li className="flex items-start gap-2">
-              <div className="w-1.5 h-1.5 rounded-full bg-sky-400 mt-1.5" />
-              <span><strong>Embeddable Widget:</strong> 1-line script tag integration for WordPress, Webflow, and custom websites (<code className="text-sky-300 font-mono">widget.js</code>).</span>
-            </li>
-          </ul>
-          <div className="pt-2 flex items-center justify-between border-t border-white/[0.06]">
+
+          <div className="pt-3 flex items-center justify-between border-t border-hairline">
             <button
+              type="button"
               onClick={() => {
                 if (typeof window !== "undefined") {
                   window.dispatchEvent(new CustomEvent("open-synapse-chat"));
                 }
               }}
-              className="text-xs text-clinical-blue hover:text-sky-300 font-medium flex items-center gap-1 transition-colors"
+              className="text-xs text-accent hover:text-accent-hover font-medium flex items-center gap-1 transition-colors cursor-pointer"
             >
-              <MessageSquare className="w-3.5 h-3.5" />
-              <span>Launch Floating Triage</span>
+              <span>Launch floating triage</span>
             </button>
             <button
+              type="button"
               onClick={() => onSelectView("patient-agent")}
-              className="text-xs text-graphite-300 hover:text-white font-medium flex items-center gap-1 transition-colors"
+              className="text-xs text-ink-secondary hover:text-ink font-medium flex items-center gap-1 transition-colors cursor-pointer"
             >
-              <span>Full-Page Portal</span>
+              <span>Full-page portal</span>
               <ArrowRight className="w-3.5 h-3.5" />
             </button>
           </div>
         </div>
 
-        {/* Clinician Copilot Card */}
-        <div className="p-5 rounded-2xl bg-graphite-900/90 border border-white/[0.08] space-y-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2.5">
-              <div className="w-8 h-8 rounded-lg bg-clinical-blue/10 border border-clinical-blue/20 flex items-center justify-center text-clinical-blue">
-                <Stethoscope className="w-4 h-4" />
+        {/* Clinician Copilot */}
+        <div className="p-6 rounded-xl bg-surface border border-hairline flex flex-col justify-between space-y-4">
+          <div className="space-y-4">
+            <div className="flex items-start justify-between gap-2">
+              <div className="flex items-center gap-3">
+                <div className="w-9 h-9 rounded-lg bg-blue-50 border border-blue-200 flex items-center justify-center text-clinical-blue shrink-0">
+                  <Stethoscope className="w-4 h-4" />
+                </div>
+                <div>
+                  <h2 className="text-sm font-semibold text-ink">Clinician Decision Support Copilot</h2>
+                  <p className="text-xs text-ink-muted">Authenticated clinical triage workspace</p>
+                </div>
               </div>
-              <div>
-                <h3 className="text-sm font-semibold text-white">Clinician Decision Support Copilot</h3>
-                <p className="text-[11px] text-graphite-400">Authenticated Clinical Decision Workspace</p>
-              </div>
+              <span className="text-[11px] px-2 py-0.5 rounded-md bg-subtle text-ink-secondary border border-hairline font-mono">
+                14-node graph
+              </span>
             </div>
-            <span className="text-[10px] px-2 py-0.5 rounded bg-clinical-blue/10 text-clinical-blue border border-clinical-blue/20 font-mono">
-              14-Node LangGraph
-            </span>
+
+            <ul className="space-y-2 text-xs text-ink-secondary leading-relaxed">
+              <li className="flex items-start gap-2">
+                <span className="w-1.5 h-1.5 rounded-full bg-clinical-blue mt-1.5 shrink-0" aria-hidden="true" />
+                <span><strong className="text-ink font-medium">Corrective RAG (CRAG):</strong> Grades retrieved chunks and reformulates queries when context is weak.</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <span className="w-1.5 h-1.5 rounded-full bg-clinical-blue mt-1.5 shrink-0" aria-hidden="true" />
+                <span><strong className="text-ink font-medium">Claim-level Self-RAG:</strong> Verifies each clinical claim against NICE and KDIGO sources.</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <span className="w-1.5 h-1.5 rounded-full bg-clinical-blue mt-1.5 shrink-0" aria-hidden="true" />
+                <span><strong className="text-ink font-medium">Pharmacovigilance engine:</strong> Real-time drug-drug, renal, and allergy contraindication screening.</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <span className="w-1.5 h-1.5 rounded-full bg-clinical-blue mt-1.5 shrink-0" aria-hidden="true" />
+                <span><strong className="text-ink font-medium">HITL interrupt gate:</strong> Pauses high-risk interventions until physician digital sign-off.</span>
+              </li>
+            </ul>
           </div>
-          <ul className="space-y-2 text-xs text-graphite-300">
-            <li className="flex items-start gap-2">
-              <div className="w-1.5 h-1.5 rounded-full bg-clinical-blue mt-1.5" />
-              <span><strong>Corrective RAG (CRAG):</strong> Evaluates chunk relevance scores; triggers autonomous query reformulation when evidence is poor.</span>
-            </li>
-            <li className="flex items-start gap-2">
-              <div className="w-1.5 h-1.5 rounded-full bg-clinical-blue mt-1.5" />
-              <span><strong>Claim-Level Self-RAG:</strong> Audits every clinical synthesis sentence against source guidelines for rigorous grounding.</span>
-            </li>
-            <li className="flex items-start gap-2">
-              <div className="w-1.5 h-1.5 rounded-full bg-clinical-blue mt-1.5" />
-              <span><strong>Pharmacovigilance & DDI:</strong> Real-time drug-drug, drug-disease, and drug-allergy contraindication screening.</span>
-            </li>
-            <li className="flex items-start gap-2">
-              <div className="w-1.5 h-1.5 rounded-full bg-clinical-blue mt-1.5" />
-              <span><strong>Regulated HITL Interruption:</strong> Pauses graph execution for chemotherapy, narcotics, or high-risk orders until human MD override.</span>
-            </li>
-          </ul>
-          <div className="pt-2 flex items-center justify-between border-t border-white/[0.06]">
-            <span className="text-[11px] text-graphite-400 font-mono">Access Level: CLINICIAN_ONLY + EHR</span>
+
+          <div className="pt-3 flex items-center justify-between border-t border-hairline">
+            <span className="text-[11px] text-ink-muted font-mono">Scope: Clinician + EHR</span>
             <button
+              type="button"
               onClick={() => onSelectView("workspace")}
-              className="text-xs text-clinical-blue hover:text-sky-300 font-medium flex items-center gap-1 transition-colors"
+              className="text-xs text-accent hover:text-accent-hover font-medium flex items-center gap-1 transition-colors cursor-pointer"
             >
-              <span>Open Clinical Workspace</span>
+              <span>Open clinical workspace</span>
               <ArrowRight className="w-3.5 h-3.5" />
             </button>
           </div>
         </div>
       </div>
 
-      {/* Quick Launch Clinical Scenarios */}
-      <div className="p-5 rounded-2xl bg-graphite-900 border border-white/[0.08] space-y-3">
-        <div className="flex items-center justify-between">
+      {/* Benchmark Scenarios */}
+      <section aria-label="Verified clinical scenarios" className="p-6 rounded-xl bg-surface border border-hairline space-y-4">
+        <div className="flex flex-wrap items-center justify-between gap-2">
           <div className="flex items-center gap-2">
-            <Zap className="w-4 h-4 text-amber-400" />
-            <h3 className="text-sm font-semibold text-white">Verified Clinical Benchmark Scenarios</h3>
+            <Zap className="w-4 h-4 text-clinical-amber" aria-hidden="true" />
+            <h2 className="text-sm font-semibold text-ink">Verified clinical benchmark scenarios</h2>
           </div>
-          <span className="text-xs text-graphite-400 font-mono">Click scenario to execute in Clinician Copilot</span>
+          <span className="text-xs text-ink-muted">Select a scenario to inspect in Clinician Copilot</span>
         </div>
+
         <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
           <button
+            type="button"
             onClick={() => {
               onSelectView("workspace");
               if (onLaunchScenario) onLaunchScenario(0);
             }}
-            className="p-3.5 text-left rounded-xl bg-graphite-850 hover:bg-graphite-800 border border-white/[0.06] hover:border-clinical-blue/40 transition-all space-y-1.5"
+            className="p-4 text-left rounded-lg bg-subtle/60 hover:bg-subtle border border-hairline hover:border-accent-border transition-colors space-y-1.5 cursor-pointer"
           >
-            <div className="text-xs font-semibold text-white">Metformin in CKD G4 (P101)</div>
-            <p className="text-[11px] text-graphite-400 line-clamp-2">
-              eGFR 24.8 mL/min contraindication, lactic acidosis risk, and Linagliptin switch.
+            <div className="text-xs font-semibold text-ink">Metformin in CKD G4 (P101)</div>
+            <p className="text-xs text-ink-secondary line-clamp-2 leading-relaxed">
+              eGFR 22.4 mL/min contraindication, lactic acidosis hazard, and alternative glycemic therapy.
             </p>
-            <div className="text-[10px] text-clinical-blue font-mono">CRAG + Cockcroft-Gault</div>
+            <div className="text-[11px] text-accent font-mono">CRAG + Cockcroft-Gault</div>
           </button>
 
           <button
+            type="button"
             onClick={() => {
               onSelectView("workspace");
               if (onLaunchScenario) onLaunchScenario(1);
             }}
-            className="p-3.5 text-left rounded-xl bg-graphite-850 hover:bg-graphite-800 border border-white/[0.06] hover:border-clinical-blue/40 transition-all space-y-1.5"
+            className="p-4 text-left rounded-lg bg-subtle/60 hover:bg-subtle border border-hairline hover:border-accent-border transition-colors space-y-1.5 cursor-pointer"
           >
-            <div className="text-xs font-semibold text-white">Warfarin + Ibuprofen Bleed (P102)</div>
-            <p className="text-[11px] text-graphite-400 line-clamp-2">
-              Fatal gastrointestinal bleeding alert, INR 3.1 elevation, and Paracetamol safe alternative.
+            <div className="text-xs font-semibold text-ink">Warfarin + Ibuprofen bleed (P102)</div>
+            <p className="text-xs text-ink-secondary line-clamp-2 leading-relaxed">
+              Upper GI hemorrhage interaction alert, INR 2.8 monitoring, and Paracetamol substitution.
             </p>
-            <div className="text-[10px] text-rose-400 font-mono">DDI Contraindication</div>
+            <div className="text-[11px] text-clinical-rose font-mono">DDI contraindication</div>
           </button>
 
           <button
+            type="button"
             onClick={() => {
               onSelectView("workspace");
               if (onLaunchScenario) onLaunchScenario(4);
             }}
-            className="p-3.5 text-left rounded-xl bg-graphite-850 hover:bg-graphite-800 border border-white/[0.06] hover:border-clinical-blue/40 transition-all space-y-1.5"
+            className="p-4 text-left rounded-lg bg-subtle/60 hover:bg-subtle border border-hairline hover:border-accent-border transition-colors space-y-1.5 cursor-pointer"
           >
-            <div className="text-xs font-semibold text-white">Chemotherapy Order Gate (P101)</div>
-            <p className="text-[11px] text-graphite-400 line-clamp-2">
-              BMDC regulatory policy gate triggering genuine LangGraph HITL pause for MD digital signature.
+            <div className="text-xs font-semibold text-ink">Chemotherapy order gate (P101)</div>
+            <p className="text-xs text-ink-secondary line-clamp-2 leading-relaxed">
+              BMDC regulatory policy gate pausing execution for mandatory clinician authorization.
             </p>
-            <div className="text-[10px] text-amber-400 font-mono">HITL Physician Gate</div>
+            <div className="text-[11px] text-clinical-amber font-mono">HITL physician gate</div>
           </button>
         </div>
-      </div>
+      </section>
     </div>
   );
 }

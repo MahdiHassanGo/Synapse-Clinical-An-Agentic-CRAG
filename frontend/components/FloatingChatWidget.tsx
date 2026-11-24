@@ -202,8 +202,9 @@ export function FloatingChatWidget() {
     <>
       {/* Floating Trigger Button */}
       <button
+        type="button"
         onClick={() => setIsOpen((prev) => !prev)}
-        className="fixed right-6 bottom-6 z-50 w-14 h-14 rounded-2xl bg-clinical-blue hover:bg-clinical-blue/90 text-white shadow-2xl shadow-clinical-blue/30 border border-white/20 flex items-center justify-center transition-all transform hover:scale-105 active:scale-95 group focus:outline-none focus:ring-2 focus:ring-clinical-blue"
+        className="fixed right-6 bottom-6 z-50 w-14 h-14 rounded-xl bg-accent hover:bg-accent-hover text-white shadow-lg border border-accent-hover/20 flex items-center justify-center transition-colors cursor-pointer"
         aria-label={isOpen ? "Close clinical triage" : "Open hospital clinical triage"}
       >
         {isOpen ? (
@@ -211,7 +212,7 @@ export function FloatingChatWidget() {
         ) : (
           <div className="relative">
             <Stethoscope className="w-6 h-6" />
-            <span className="absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full bg-emerald-400 border-2 border-slate-900 animate-pulse" />
+            <span className="absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full bg-emerald-400 border-2 border-accent" aria-hidden="true" />
           </div>
         )}
       </button>
@@ -221,45 +222,46 @@ export function FloatingChatWidget() {
         <div
           role="dialog"
           aria-label="Synapse Hospital Clinical Triage Navigator"
-          className="fixed right-6 bottom-24 z-50 flex flex-col overflow-hidden rounded-2xl border border-white/[0.1] bg-graphite-950 text-white shadow-2xl w-[min(26rem,calc(100vw-2rem))] h-[min(38rem,calc(100dvh-7rem))] font-sans animate-in fade-in slide-in-from-bottom-4 duration-200"
+          className="fixed right-6 bottom-24 z-50 flex flex-col overflow-hidden rounded-xl border border-hairline bg-canvas text-ink shadow-xl w-[min(26rem,calc(100vw-2rem))] h-[min(38rem,calc(100dvh-7rem))] font-sans"
         >
           {/* Header */}
-          <div className="flex items-center justify-between border-b border-white/[0.08] bg-graphite-900 px-4 py-3 shrink-0">
+          <div className="flex items-center justify-between border-b border-hairline bg-surface px-4 py-3 shrink-0">
             <div className="flex items-center gap-2.5 min-w-0">
-              <div className="flex size-8 shrink-0 items-center justify-center rounded-xl bg-clinical-blue/15 text-clinical-blue border border-clinical-blue/20">
-                <Stethoscope className="size-4.5" />
+              <div className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-accent-soft text-accent border border-accent-border">
+                <Stethoscope className="size-4" />
               </div>
               <div className="min-w-0">
                 <div className="flex items-center gap-1.5">
-                  <p className="truncate font-semibold text-xs text-white">
+                  <p className="truncate font-semibold text-xs text-ink">
                     {tenantId === "CLINIC_DHAKA"
                       ? "Bangladesh Specialized Hospital"
                       : "Metropolitan Academic Medical"}
                   </p>
-                  <span className="text-[9px] font-mono px-1.5 py-0.2 rounded bg-clinical-blue/15 text-clinical-blue border border-clinical-blue/30">
-                    Agentic RAG
+                  <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-accent-soft text-accent border border-accent-border shrink-0">
+                    RAG
                   </span>
                 </div>
-                <p className="truncate text-[10px] text-graphite-400">
+                <p className="truncate text-[11px] text-ink-muted">
                   Department &amp; Specialist Matching
                 </p>
               </div>
             </div>
 
-            <div className="flex items-center gap-1.5">
-              {/* Language Switcher */}
+            <div className="flex items-center gap-1.5 shrink-0">
               <button
+                type="button"
                 onClick={() => setLanguage((prev) => (prev === "en" ? "bn" : "en"))}
-                className="px-2 py-1 rounded-md bg-graphite-800 hover:bg-graphite-750 text-[10px] font-mono text-graphite-300 hover:text-white border border-white/[0.06] flex items-center gap-1 transition-colors"
+                className="px-2 py-1 rounded-md bg-subtle hover:bg-muted text-[11px] font-mono text-ink-secondary hover:text-ink border border-hairline flex items-center gap-1 transition-colors cursor-pointer"
                 title="Switch Language"
               >
-                <Globe className="w-3 h-3 text-clinical-blue" />
+                <Globe className="w-3 h-3 text-accent" />
                 <span>{language === "en" ? "বাংলা" : "English"}</span>
               </button>
 
               <button
+                type="button"
                 onClick={() => setIsOpen(false)}
-                className="p-1 rounded-md text-graphite-400 hover:text-white hover:bg-white/[0.06] transition-colors"
+                className="p-1.5 rounded-md text-ink-muted hover:text-ink hover:bg-subtle transition-colors cursor-pointer"
                 aria-label="Close"
               >
                 <X className="w-4 h-4" />
@@ -269,10 +271,10 @@ export function FloatingChatWidget() {
 
           {/* Booking Confirmation Toast */}
           {bookedDoctor && (
-            <div className="bg-emerald-500/20 border-b border-emerald-500/30 px-3 py-1.5 text-[11px] text-emerald-300 flex items-center gap-1.5 animate-fadeIn">
+            <div className="bg-emerald-50 border-b border-emerald-200 px-3 py-2 text-xs text-clinical-emerald flex items-center gap-1.5">
               <CheckCircle2 className="w-3.5 h-3.5 shrink-0" />
               <span>
-                Consultation appointment hold requested with <strong>{bookedDoctor}</strong>!
+                Consultation appointment hold requested with <strong>{bookedDoctor}</strong>.
               </span>
             </div>
           )}
@@ -280,7 +282,7 @@ export function FloatingChatWidget() {
           {/* Messages Area */}
           <div
             ref={scrollAreaRef}
-            className="flex-1 space-y-3.5 overflow-y-auto p-4 bg-graphite-950/80"
+            className="flex-1 space-y-3.5 overflow-y-auto p-4 bg-canvas"
           >
             {messages.map((message) => (
               <ChatBubble
@@ -291,11 +293,10 @@ export function FloatingChatWidget() {
               />
             ))}
 
-            {/* Suggested Queries if only welcome message */}
             {messages.length === 1 && !isSending && (
               <div className="space-y-2 pt-2">
-                <p className="text-[10px] font-mono uppercase tracking-wider text-graphite-500">
-                  {language === "bn" ? "প্রস্তাবিত জিজ্ঞাসা সমূহ:" : "Suggested Symptom Inquiries:"}
+                <p className="text-[11px] font-medium text-ink-muted">
+                  {language === "bn" ? "প্রস্তাবিত জিজ্ঞাসা সমূহ:" : "Suggested symptom inquiries:"}
                 </p>
                 <div className="space-y-1.5">
                   {(language === "bn" ? SUGGESTED_QUERIES_BN : SUGGESTED_QUERIES_EN).map((q, idx) => (
@@ -303,10 +304,10 @@ export function FloatingChatWidget() {
                       key={idx}
                       type="button"
                       onClick={() => sendMessage(q)}
-                      className="w-full rounded-xl border border-white/[0.08] bg-graphite-900/90 hover:bg-graphite-850 hover:border-clinical-blue/40 px-3 py-2 text-left text-[11px] text-graphite-300 hover:text-white transition-all shadow-sm flex items-center justify-between group"
+                      className="w-full rounded-lg border border-hairline bg-surface hover:bg-subtle hover:border-accent-border px-3 py-2 text-left text-xs text-ink-secondary hover:text-ink transition-colors flex items-center justify-between group cursor-pointer"
                     >
                       <span className="line-clamp-2 leading-snug">{q}</span>
-                      <ChevronRight className="w-3.5 h-3.5 text-graphite-500 group-hover:text-clinical-blue shrink-0 ml-1.5 transition-colors" />
+                      <ChevronRight className="w-3.5 h-3.5 text-ink-muted group-hover:text-accent shrink-0 ml-1.5 transition-colors" />
                     </button>
                   ))}
                 </div>
@@ -314,8 +315,8 @@ export function FloatingChatWidget() {
             )}
 
             {isSending && (
-              <div className="flex items-center gap-2 rounded-xl border border-white/[0.08] bg-graphite-900 p-3 text-xs text-graphite-400">
-                <div className="w-2 h-2 rounded-full bg-clinical-blue animate-ping" />
+              <div className="flex items-center gap-2 rounded-lg border border-hairline bg-surface p-3 text-xs text-ink-secondary">
+                <div className="w-2 h-2 rounded-full bg-accent animate-ping" />
                 <span>
                   {language === "bn"
                     ? "হাসপাতালের স্পেশালিস্ট ডিরেক্টরি ও ক্লিনিক্যাল গাইডলাইন যাচাই করা হচ্ছে…"
@@ -331,7 +332,7 @@ export function FloatingChatWidget() {
               e.preventDefault();
               sendMessage();
             }}
-            className="border-t border-white/[0.08] bg-graphite-900 p-2.5 shrink-0"
+            className="border-t border-hairline bg-surface p-2.5 shrink-0"
           >
             <div className="flex items-end gap-1.5">
               <textarea
@@ -350,30 +351,29 @@ export function FloatingChatWidget() {
                     : "Describe symptoms (e.g., chest pain, migraine, skin rash)…"
                 }
                 rows={2}
-                className="flex-1 max-h-28 min-h-[44px] resize-none rounded-xl bg-graphite-950 border border-white/[0.1] px-3 py-2.5 text-xs leading-snug text-white placeholder-graphite-400 outline-none focus:border-clinical-blue transition-colors"
+                className="flex-1 max-h-28 min-h-[44px] resize-none rounded-lg bg-subtle border border-hairline px-3 py-2.5 text-xs leading-snug text-ink placeholder-ink-muted outline-none focus:border-accent transition-colors"
               />
               <button
                 type="submit"
                 disabled={!input.trim() || isSending}
-                className="w-11 h-11 shrink-0 rounded-xl bg-clinical-blue hover:bg-clinical-blue/90 disabled:opacity-40 text-white flex items-center justify-center transition-colors shadow-sm cursor-pointer"
+                className="w-11 h-11 shrink-0 rounded-lg bg-accent hover:bg-accent-hover disabled:opacity-40 text-white flex items-center justify-center transition-colors cursor-pointer"
                 aria-label="Send query"
               >
                 <Send className="w-3.5 h-3.5" />
               </button>
             </div>
 
-            {/* Emergency Hotline Banner */}
-            <div className="mt-2 pt-2 border-t border-white/[0.04] flex items-center justify-between text-[10px] text-graphite-400">
+            <div className="mt-2 pt-2 border-t border-hairline flex items-center justify-between text-[11px] text-ink-muted">
               <span className="truncate">
                 {language === "bn"
                   ? "জরুরি চিকিৎসা সহায়তা:"
-                  : "Guidance only. Emergency Hotline:"}
+                  : "Guidance only. Emergency hotline:"}
               </span>
               <a
                 href={`tel:${emergencyPhone}`}
-                className="font-mono font-bold text-rose-400 hover:text-rose-300 flex items-center gap-1 bg-rose-500/10 px-2 py-0.5 rounded border border-rose-500/20"
+                className="font-mono font-semibold text-clinical-rose hover:underline flex items-center gap-1 bg-red-50 px-2 py-0.5 rounded border border-red-200"
               >
-                <PhoneCall className="w-2.5 h-2.5" />
+                <PhoneCall className="w-3 h-3" />
                 <span>{tenantId === "CLINIC_DHAKA" ? "10633 / 999" : emergencyPhone}</span>
               </a>
             </div>
@@ -399,23 +399,22 @@ function ChatBubble({
   return (
     <div className={isUser ? "flex justify-end" : "flex justify-start"}>
       <div
-        className={`rounded-2xl text-xs leading-relaxed max-w-[90%] shadow-lg ${
+        className={`rounded-xl text-xs leading-relaxed max-w-[90%] ${
           isUser
-            ? "bg-clinical-blue text-white px-3.5 py-2.5 rounded-br-sm"
+            ? "bg-accent text-white px-3.5 py-2.5 rounded-br-sm"
             : isEmergency
-            ? "bg-rose-950/80 border border-rose-500/40 text-rose-100 p-3.5 rounded-bl-sm"
-            : "bg-graphite-900 border border-white/[0.08] text-graphite-200 p-3.5 rounded-bl-sm"
+            ? "bg-red-50 border border-red-200 text-clinical-rose p-3.5 rounded-bl-sm"
+            : "bg-surface border border-hairline text-ink p-3.5 rounded-bl-sm"
         }`}
       >
-        {/* Assistant Header & Verification Badge */}
         {!isUser && (
-          <div className="flex items-center justify-between pb-2 mb-2 border-b border-white/[0.06] text-[10px] font-mono">
-            <span className="flex items-center gap-1 text-clinical-blue font-semibold">
+          <div className="flex items-center justify-between pb-2 mb-2 border-b border-hairline text-[11px] font-mono">
+            <span className="flex items-center gap-1 text-accent font-semibold">
               <Stethoscope className="w-3 h-3" />
               <span>Synapse Navigator</span>
             </span>
             {message.agentic_trace && (
-              <span className="text-emerald-400 flex items-center gap-0.5">
+              <span className="text-clinical-emerald flex items-center gap-0.5">
                 <ShieldCheck className="w-3 h-3" />
                 <span>CRAG Grounded</span>
               </span>
@@ -423,17 +422,15 @@ function ChatBubble({
           </div>
         )}
 
-        {/* Message Content */}
-        <div className="whitespace-pre-wrap break-words leading-relaxed text-[11.5px]">
+        <div className="whitespace-pre-wrap break-words leading-relaxed text-xs">
           {message.content}
         </div>
 
-        {/* Recommended Specialists Cards */}
         {!!message.recommended_specialists?.length && (
-          <div className="mt-3 pt-2.5 border-t border-white/[0.06] space-y-2">
-            <div className="flex items-center justify-between text-[10px] font-mono uppercase tracking-wider text-graphite-400">
-              <span>{language === "bn" ? "প্রস্তাবিত বিশেষজ্ঞ চিকিৎসক" : "Recommended Specialists"}</span>
-              <span className="text-clinical-blue font-semibold">
+          <div className="mt-3 pt-2.5 border-t border-hairline space-y-2">
+            <div className="flex items-center justify-between text-[11px] font-medium text-ink-muted">
+              <span>{language === "bn" ? "প্রস্তাবিত বিশেষজ্ঞ চিকিৎসক" : "Recommended specialists"}</span>
+              <span className="text-accent font-mono font-semibold">
                 {message.recommended_specialists.length} available
               </span>
             </div>
@@ -448,45 +445,46 @@ function ChatBubble({
                 return (
                   <div
                     key={doctor.id || doctor.doctor_id || `doc_${idx}`}
-                    className="p-2.5 rounded-xl bg-graphite-950/80 border border-white/[0.08] hover:border-clinical-blue/40 transition-all space-y-2"
+                    className="p-2.5 rounded-lg bg-subtle border border-hairline hover:border-accent-border transition-colors space-y-2"
                   >
                     <div className="flex items-start justify-between gap-2">
                       <div className="min-w-0">
-                        <div className="font-semibold text-white text-[11.5px] truncate flex items-center gap-1">
+                        <div className="font-semibold text-ink text-xs truncate flex items-center gap-1">
                           <span>{doctor.name}</span>
                           {doctor.bmdc_reg_no && (
-                            <span className="text-[9px] font-mono px-1 py-0.2 rounded bg-graphite-800 text-graphite-400 border border-white/[0.04]">
+                            <span className="text-[10px] font-mono px-1 py-0.5 rounded bg-surface text-ink-muted border border-hairline">
                               {doctor.bmdc_reg_no}
                             </span>
                           )}
                         </div>
-                        <div className="text-[10.5px] text-clinical-blue font-medium mt-0.5">
+                        <div className="text-[11px] text-accent font-medium mt-0.5">
                           {doctor.specialization || doctor.specialty}
                         </div>
-                        <div className="text-[10px] text-graphite-400 line-clamp-1 mt-0.5">
+                        <div className="text-[11px] text-ink-muted line-clamp-1 mt-0.5">
                           {doctor.qualifications}
                         </div>
                       </div>
 
                       <div className="text-right shrink-0">
-                        <div className="font-mono font-bold text-emerald-400 text-xs">
+                        <div className="font-mono font-bold text-clinical-emerald text-xs tabular-nums">
                           {feeText}
                         </div>
-                        <div className="text-[9px] font-mono text-graphite-500 uppercase">
-                          Consultation Fee
+                        <div className="text-[10px] font-mono text-ink-muted">
+                          Fee
                         </div>
                       </div>
                     </div>
 
-                    <div className="flex items-center justify-between pt-1.5 border-t border-white/[0.04] text-[10px]">
-                      <div className="flex items-center gap-1 text-graphite-300 font-mono">
-                        <Clock className="w-3 h-3 text-amber-400" />
+                    <div className="flex items-center justify-between pt-1.5 border-t border-hairline text-[11px]">
+                      <div className="flex items-center gap-1 text-ink-secondary font-mono">
+                        <Clock className="w-3 h-3 text-clinical-amber" />
                         <span className="truncate max-w-[140px]">{doctor.available_schedule}</span>
                       </div>
 
                       <button
+                        type="button"
                         onClick={() => onBookSlot(doctor)}
-                        className="px-2.5 py-1 rounded-lg bg-clinical-blue hover:bg-clinical-blue/90 text-white font-medium flex items-center gap-1 transition-colors shadow-sm"
+                        className="px-2.5 py-1 rounded-md bg-accent hover:bg-accent-hover text-white font-medium flex items-center gap-1 transition-colors cursor-pointer"
                       >
                         <span>Book Slot</span>
                         <ChevronRight className="w-3 h-3" />

@@ -89,23 +89,24 @@ export function RAGEvaluationView() {
       : 95.0;
 
   return (
-    <div className="flex-1 overflow-y-auto p-6 space-y-6 max-w-7xl mx-auto w-full font-sans">
+    <div className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-6 max-w-7xl mx-auto w-full font-sans bg-canvas text-ink">
       {/* Header & Run Button */}
-      <div className="flex flex-wrap items-center justify-between gap-4 pb-4 border-b border-white/[0.08]">
+      <div className="flex flex-wrap items-center justify-between gap-4 pb-4 border-b border-hairline">
         <div>
-          <h1 className="text-lg font-bold text-white flex items-center gap-2">
-            <BarChart2 className="w-5 h-5 text-clinical-blue" />
-            <span>Clinical RAG Evaluation & Retrieval Benchmarking</span>
+          <h1 className="text-lg font-semibold text-ink flex items-center gap-2">
+            <BarChart2 className="w-5 h-5 text-accent" />
+            <span>Clinical RAG Evaluation &amp; Retrieval Benchmarking</span>
           </h1>
-          <p className="text-xs text-graphite-400 mt-1">
+          <p className="text-xs text-ink-muted mt-1">
             Deterministic quantitative measurement of Recall@K, Precision@K, MRR, nDCG@K, and Self-RAG Groundedness.
           </p>
         </div>
 
         <button
+          type="button"
           onClick={runBenchmark}
           disabled={loading}
-          className="px-4 py-2 rounded-xl bg-clinical-blue hover:bg-clinical-blue/90 text-white text-xs font-semibold flex items-center gap-2 transition-colors disabled:opacity-50 shadow-lg shadow-clinical-blue/20"
+          className="min-h-[40px] px-4 py-2 rounded-lg bg-accent hover:bg-accent-hover text-white text-xs font-semibold flex items-center gap-2 transition-colors disabled:opacity-50 cursor-pointer"
         >
           {loading ? (
             <RotateCw className="w-4 h-4 animate-spin" />
@@ -117,7 +118,7 @@ export function RAGEvaluationView() {
       </div>
 
       {error && (
-        <div className="p-3 rounded-xl bg-clinical-rose/10 border border-clinical-rose/30 text-clinical-rose text-xs flex items-center gap-2">
+        <div className="p-3 rounded-xl bg-red-50 border border-red-200 text-clinical-rose text-xs flex items-center gap-2">
           <AlertCircle className="w-4 h-4 shrink-0" />
           <span>{error}</span>
         </div>
@@ -126,72 +127,67 @@ export function RAGEvaluationView() {
       {/* Metric Summary Cards */}
       {report && (
         <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
-          {/* Recall@K */}
-          <div className="bg-graphite-900 border border-white/[0.08] rounded-2xl p-4 space-y-2 shadow-xl">
-            <div className="flex items-center justify-between text-graphite-400 text-xs">
+          <div className="bg-surface border border-hairline rounded-xl p-4 space-y-1.5">
+            <div className="flex items-center justify-between text-ink-muted text-xs">
               <span>Recall@{kVal}</span>
               <Award className="w-4 h-4 text-clinical-emerald" />
             </div>
-            <div className="text-2xl font-bold font-mono text-white tabular-nums">
+            <div className="text-2xl font-semibold font-mono text-ink tabular-nums">
               {meanRecall.toFixed(1)}%
             </div>
-            <div className="text-[10px] font-mono text-clinical-emerald">
+            <div className="text-[11px] font-mono text-clinical-emerald">
               Target: &ge; 85.0%
             </div>
           </div>
 
-          {/* Precision@K */}
-          <div className="bg-graphite-900 border border-white/[0.08] rounded-2xl p-4 space-y-2 shadow-xl">
-            <div className="flex items-center justify-between text-graphite-400 text-xs">
+          <div className="bg-surface border border-hairline rounded-xl p-4 space-y-1.5">
+            <div className="flex items-center justify-between text-ink-muted text-xs">
               <span>Precision@{kVal}</span>
-              <Layers className="w-4 h-4 text-clinical-teal" />
+              <Layers className="w-4 h-4 text-accent" />
             </div>
-            <div className="text-2xl font-bold font-mono text-white tabular-nums">
+            <div className="text-2xl font-semibold font-mono text-ink tabular-nums">
               {meanPrec.toFixed(1)}%
             </div>
-            <div className="text-[10px] font-mono text-clinical-teal">
+            <div className="text-[11px] font-mono text-accent">
               Hybrid Dense + BM25
             </div>
           </div>
 
-          {/* MRR */}
-          <div className="bg-graphite-900 border border-white/[0.08] rounded-2xl p-4 space-y-2 shadow-xl">
-            <div className="flex items-center justify-between text-graphite-400 text-xs">
+          <div className="bg-surface border border-hairline rounded-xl p-4 space-y-1.5">
+            <div className="flex items-center justify-between text-ink-muted text-xs">
               <span>MRR</span>
               <BarChart2 className="w-4 h-4 text-clinical-blue" />
             </div>
-            <div className="text-2xl font-bold font-mono text-white tabular-nums">
+            <div className="text-2xl font-semibold font-mono text-ink tabular-nums">
               {meanMRR.toFixed(3)}
             </div>
-            <div className="text-[10px] font-mono text-clinical-blue">
+            <div className="text-[11px] font-mono text-clinical-blue">
               Mean Reciprocal Rank
             </div>
           </div>
 
-          {/* nDCG@K */}
-          <div className="bg-graphite-900 border border-white/[0.08] rounded-2xl p-4 space-y-2 shadow-xl">
-            <div className="flex items-center justify-between text-graphite-400 text-xs">
+          <div className="bg-surface border border-hairline rounded-xl p-4 space-y-1.5">
+            <div className="flex items-center justify-between text-ink-muted text-xs">
               <span>nDCG@{kVal}</span>
               <Percent className="w-4 h-4 text-clinical-amber" />
             </div>
-            <div className="text-2xl font-bold font-mono text-white tabular-nums">
+            <div className="text-2xl font-semibold font-mono text-ink tabular-nums">
               {meanNDCG.toFixed(3)}
             </div>
-            <div className="text-[10px] font-mono text-clinical-amber">
+            <div className="text-[11px] font-mono text-clinical-amber">
               Discounted Cumulative Gain
             </div>
           </div>
 
-          {/* Groundedness */}
-          <div className="bg-graphite-900 border border-white/[0.08] rounded-2xl p-4 space-y-2 shadow-xl">
-            <div className="flex items-center justify-between text-graphite-400 text-xs">
+          <div className="bg-surface border border-hairline rounded-xl p-4 space-y-1.5">
+            <div className="flex items-center justify-between text-ink-muted text-xs">
               <span>Groundedness</span>
               <FileCheck className="w-4 h-4 text-clinical-emerald" />
             </div>
-            <div className="text-2xl font-bold font-mono text-white tabular-nums">
+            <div className="text-2xl font-semibold font-mono text-ink tabular-nums">
               {meanGroundedness.toFixed(1)}%
             </div>
-            <div className="text-[10px] font-mono text-clinical-emerald">
+            <div className="text-[11px] font-mono text-clinical-emerald">
               Claim-Level Self-RAG
             </div>
           </div>
@@ -200,21 +196,21 @@ export function RAGEvaluationView() {
 
       {/* Benchmark Test Cases Table */}
       {report && (
-        <div className="bg-graphite-900 border border-white/[0.08] rounded-2xl p-5 space-y-4 shadow-xl">
-          <div className="flex items-center justify-between pb-2 border-b border-white/[0.06]">
+        <div className="bg-surface border border-hairline rounded-xl p-5 space-y-4">
+          <div className="flex flex-wrap items-center justify-between gap-2 pb-3 border-b border-hairline">
             <div>
-              <h3 className="text-xs font-semibold text-white">
+              <h3 className="text-xs font-semibold text-ink">
                 Validated Clinical Benchmark Test Scenarios
               </h3>
-              <span className="text-[11px] font-mono text-graphite-400">
+              <span className="text-[11px] font-mono text-ink-muted">
                 {report.total_queries ?? cases.length} queries evaluated against ground-truth authoritative guidelines
               </span>
             </div>
             <span
-              className={`px-2.5 py-0.5 rounded-full text-[10px] font-mono font-semibold uppercase ${
+              className={`px-2.5 py-0.5 rounded-md text-[11px] font-mono font-semibold border ${
                 report.all_passed ?? true
-                  ? "bg-clinical-emerald/15 text-clinical-emerald border border-clinical-emerald/30"
-                  : "bg-clinical-rose/15 text-clinical-rose border border-clinical-rose/30"
+                  ? "bg-emerald-50 text-clinical-emerald border-emerald-200"
+                  : "bg-red-50 text-clinical-rose border-red-200"
               }`}
             >
               {report.all_passed ?? true ? "All Benchmarks Passed" : "Deficiencies Detected"}
@@ -224,18 +220,18 @@ export function RAGEvaluationView() {
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs">
               <thead>
-                <tr className="border-b border-white/[0.06] text-graphite-400 font-mono text-[11px]">
-                  <th className="pb-2.5 font-normal">Clinical Query</th>
-                  <th className="pb-2.5 font-normal">Expected Target</th>
-                  <th className="pb-2.5 font-normal">Retrieved Docs</th>
-                  <th className="pb-2.5 font-normal">Rank</th>
-                  <th className="pb-2.5 font-normal">MRR</th>
-                  <th className="pb-2.5 font-normal">nDCG</th>
-                  <th className="pb-2.5 font-normal">Groundedness</th>
-                  <th className="pb-2.5 font-normal text-right">Status</th>
+                <tr className="border-b border-hairline text-ink-muted font-mono text-[11px]">
+                  <th className="pb-2.5 font-medium">Clinical Query</th>
+                  <th className="pb-2.5 font-medium">Expected Target</th>
+                  <th className="pb-2.5 font-medium">Retrieved Docs</th>
+                  <th className="pb-2.5 font-medium">Rank</th>
+                  <th className="pb-2.5 font-medium">MRR</th>
+                  <th className="pb-2.5 font-medium">nDCG</th>
+                  <th className="pb-2.5 font-medium">Groundedness</th>
+                  <th className="pb-2.5 font-medium text-right">Status</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-white/[0.04]">
+              <tbody className="divide-y divide-hairline">
                 {cases.map((tc, idx) => {
                   const target = tc.expected_doc_id || tc.target_doc_id || "Target";
                   const rank =
@@ -247,23 +243,23 @@ export function RAGEvaluationView() {
                   const isPassed = tc.passed ?? ((tc.recall_at_k ?? 0) > 0);
 
                   return (
-                    <tr key={idx} className="hover:bg-white/[0.01]">
-                      <td className="py-3 pr-3 text-graphite-200 max-w-xs font-sans">
+                    <tr key={idx} className="hover:bg-subtle/60 transition-colors">
+                      <td className="py-3 pr-3 text-ink max-w-xs font-sans">
                         {tc.query}
                       </td>
-                      <td className="py-3 font-mono text-[11px] text-clinical-blue">
+                      <td className="py-3 font-mono text-[11px] text-accent font-medium">
                         {target}
                       </td>
-                      <td className="py-3 font-mono text-[10px] text-graphite-300">
+                      <td className="py-3 font-mono text-[11px] text-ink-secondary">
                         {(tc.retrieved_doc_ids || []).join(", ")}
                       </td>
-                      <td className="py-3 font-mono text-white tabular-nums">
+                      <td className="py-3 font-mono text-ink tabular-nums">
                         {rank}
                       </td>
-                      <td className="py-3 font-mono text-graphite-300 tabular-nums">
+                      <td className="py-3 font-mono text-ink-secondary tabular-nums">
                         {(tc.reciprocal_rank ?? 0).toFixed(2)}
                       </td>
-                      <td className="py-3 font-mono text-graphite-300 tabular-nums">
+                      <td className="py-3 font-mono text-ink-secondary tabular-nums">
                         {(tc.ndcg_at_k ?? 0).toFixed(2)}
                       </td>
                       <td className="py-3 font-mono text-clinical-emerald font-semibold tabular-nums">
@@ -271,10 +267,10 @@ export function RAGEvaluationView() {
                       </td>
                       <td className="py-3 text-right">
                         <span
-                          className={`px-2 py-0.5 rounded text-[10px] font-mono font-semibold ${
+                          className={`px-2 py-0.5 rounded text-[11px] font-mono font-semibold border ${
                             isPassed
-                              ? "bg-clinical-emerald/10 text-clinical-emerald"
-                              : "bg-clinical-rose/10 text-clinical-rose"
+                              ? "bg-emerald-50 text-clinical-emerald border-emerald-200"
+                              : "bg-red-50 text-clinical-rose border-red-200"
                           }`}
                         >
                           {isPassed ? "PASSED" : "FAILED"}
@@ -289,72 +285,72 @@ export function RAGEvaluationView() {
         </div>
       )}
 
-      {/* RAG Evaluation Methodology & Formula Reference */}
-      <div className="bg-graphite-900 border border-white/[0.08] rounded-2xl p-5 space-y-4 shadow-xl">
-        <div className="flex items-center gap-2 pb-2 border-b border-white/[0.06]">
-          <BookOpen className="w-4 h-4 text-clinical-blue" />
-          <h3 className="text-xs font-semibold text-white">
-            Formal Evaluation Methodology & Mathematical Formulas
+      {/* RAG Evaluation Methodology */}
+      <div className="bg-surface border border-hairline rounded-xl p-5 space-y-4">
+        <div className="flex items-center gap-2 pb-2.5 border-b border-hairline">
+          <BookOpen className="w-4 h-4 text-accent" />
+          <h3 className="text-xs font-semibold text-ink">
+            Formal Evaluation Methodology &amp; Mathematical Formulas
           </h3>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs text-graphite-300">
-          <div className="bg-graphite-850 p-4 rounded-xl border border-white/[0.04] space-y-2">
-            <span className="font-semibold text-white block">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs text-ink-secondary">
+          <div className="bg-subtle p-4 rounded-lg border border-hairline space-y-2">
+            <span className="font-semibold text-ink block">
               1. Mean Reciprocal Rank (MRR)
             </span>
-            <p className="text-[11px] leading-relaxed text-graphite-400">
+            <p className="text-xs leading-relaxed">
               Evaluates the ability of the hybrid retriever and FlashRank neural reranker to position the primary authoritative guideline chunk at rank 1.
             </p>
-            <div className="bg-graphite-950 p-2.5 rounded-lg border border-white/[0.04] font-mono text-[11px] text-clinical-blue text-center">
+            <div className="bg-surface p-2.5 rounded-md border border-hairline font-mono text-[11px] text-accent text-center">
               MRR = (1 / |Q|) * &Sigma; (1 / rank_i)
             </div>
-            <p className="text-[10px] text-graphite-500 font-mono">
+            <p className="text-[11px] text-ink-muted font-mono">
               Where rank_i is the 1-based index of the first ground-truth document chunk.
             </p>
           </div>
 
-          <div className="bg-graphite-850 p-4 rounded-xl border border-white/[0.04] space-y-2">
-            <span className="font-semibold text-white block">
+          <div className="bg-subtle p-4 rounded-lg border border-hairline space-y-2">
+            <span className="font-semibold text-ink block">
               2. Normalized Discounted Cumulative Gain (nDCG@K)
             </span>
-            <p className="text-[11px] leading-relaxed text-graphite-400">
+            <p className="text-xs leading-relaxed">
               Measures retrieval ranking quality with logarithmic position penalties, ensuring high-relevance clinical evidence precedes peripheral context.
             </p>
-            <div className="bg-graphite-950 p-2.5 rounded-lg border border-white/[0.04] font-mono text-[11px] text-clinical-amber text-center">
+            <div className="bg-surface p-2.5 rounded-md border border-hairline font-mono text-[11px] text-clinical-amber text-center">
               DCG_K = &Sigma; (2^rel_i - 1) / log2(i + 1)
             </div>
-            <p className="text-[10px] text-graphite-500 font-mono">
+            <p className="text-[11px] text-ink-muted font-mono">
               nDCG_K = DCG_K / IDCG_K (normalized against the ideal ranking score).
             </p>
           </div>
 
-          <div className="bg-graphite-850 p-4 rounded-xl border border-white/[0.04] space-y-2">
-            <span className="font-semibold text-white block">
+          <div className="bg-subtle p-4 rounded-lg border border-hairline space-y-2">
+            <span className="font-semibold text-ink block">
               3. Claim-Level Self-RAG Groundedness
             </span>
-            <p className="text-[11px] leading-relaxed text-graphite-400">
+            <p className="text-xs leading-relaxed">
               Decomposes the clinical synthesis into individual medical claims and checks natural language inference (NLI) entailment against retrieved chunks.
             </p>
-            <div className="bg-graphite-950 p-2.5 rounded-lg border border-white/[0.04] font-mono text-[11px] text-clinical-emerald text-center">
+            <div className="bg-surface p-2.5 rounded-md border border-hairline font-mono text-[11px] text-clinical-emerald text-center">
               Groundedness = Count(SUPPORTED claims) / Total claims
             </div>
-            <p className="text-[10px] text-graphite-500 font-mono">
+            <p className="text-[11px] text-ink-muted font-mono">
               Claims categorized as CONTRADICTORY immediately trigger a safety gate interrupt.
             </p>
           </div>
 
-          <div className="bg-graphite-850 p-4 rounded-xl border border-white/[0.04] space-y-2">
-            <span className="font-semibold text-white block">
+          <div className="bg-subtle p-4 rounded-lg border border-hairline space-y-2">
+            <span className="font-semibold text-ink block">
               4. Corrective RAG (CRAG) Re-trigger Threshold
             </span>
-            <p className="text-[11px] leading-relaxed text-graphite-400">
+            <p className="text-xs leading-relaxed">
               If the mean relevance score of the top-5 reranked candidates is &lt; 0.65, the query reformulation loop rewrites the query up to 2 times.
             </p>
-            <div className="bg-graphite-950 p-2.5 rounded-lg border border-white/[0.04] font-mono text-[11px] text-clinical-teal text-center">
+            <div className="bg-surface p-2.5 rounded-md border border-hairline font-mono text-[11px] text-clinical-blue text-center">
               Sufficiency = (Mean Relevance &ge; 0.65) &and; (Relevant Chunks &ge; 1)
             </div>
-            <p className="text-[10px] text-graphite-500 font-mono">
+            <p className="text-[11px] text-ink-muted font-mono">
               Guarantees that poor retrieval never feeds the clinical synthesis generator.
             </p>
           </div>

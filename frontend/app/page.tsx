@@ -299,7 +299,7 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-graphite-950 flex flex-col font-sans">
+    <div className="min-h-screen bg-canvas text-ink flex flex-col font-sans">
       <Header
         currentView={currentView}
         onSelectView={(v) => setCurrentView(v)}
@@ -332,7 +332,7 @@ export default function Home() {
           <main className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-5 max-w-5xl w-full">
             {/* Preset Clinical Scenarios */}
             <div className="space-y-2">
-              <span className="text-xs font-medium text-graphite-400">
+              <span className="text-xs font-medium text-ink-muted">
                 Validated Clinical Scenarios (Self-RAG &amp; CRAG Benchmarks)
               </span>
               <div className="flex flex-wrap gap-2">
@@ -341,9 +341,9 @@ export default function Home() {
                     key={idx}
                     type="button"
                     onClick={() => handleApplyPreset(preset)}
-                    className="px-3 py-1.5 rounded-lg bg-graphite-850 hover:bg-graphite-800 border border-white/[0.08] hover:border-clinical-blue/40 text-xs text-graphite-200 transition-colors flex items-center gap-1.5 cursor-pointer"
+                    className="px-3 py-1.5 rounded-lg bg-surface hover:bg-subtle border border-hairline hover:border-accent-border text-xs text-ink-secondary hover:text-ink transition-colors flex items-center gap-1.5 cursor-pointer"
                   >
-                    <ArrowRight className="w-3 h-3 text-clinical-blue shrink-0" aria-hidden="true" />
+                    <ArrowRight className="w-3 h-3 text-accent shrink-0" aria-hidden="true" />
                     <span>{preset.label}</span>
                   </button>
                 ))}
@@ -351,7 +351,7 @@ export default function Home() {
             </div>
 
             {/* Clinical Inquiry Input Bar */}
-            <div className="bg-graphite-900 border border-white/[0.08] focus-within:border-clinical-blue/50 rounded-2xl p-4 shadow-xl space-y-2 transition-colors">
+            <div className="bg-surface border border-hairline focus-within:border-accent rounded-xl p-4 space-y-2 transition-colors">
               <label htmlFor="clinical-query-input" className="sr-only">
                 Clinical inquiry or proposed prescription
               </label>
@@ -368,65 +368,66 @@ export default function Home() {
                     }
                   }}
                   placeholder="Enter clinical inquiry, proposed prescription, or triage question..."
-                  className="w-full bg-transparent text-sm text-white placeholder-graphite-400 focus:outline-none resize-none leading-relaxed"
+                  className="w-full bg-transparent text-sm text-ink placeholder-ink-muted focus:outline-none resize-none leading-relaxed"
                 />
                 <button
                   type="button"
                   onClick={() => handleRunTriage()}
                   disabled={isStreaming}
-                  className="min-h-[44px] px-5 py-2.5 rounded-xl bg-clinical-blue hover:bg-clinical-blue/90 text-white text-xs font-semibold transition-colors flex items-center justify-center gap-2 disabled:opacity-50 shrink-0 self-end shadow-lg shadow-clinical-blue/20 cursor-pointer"
+                  className="min-h-[44px] px-5 py-2.5 rounded-lg bg-accent hover:bg-accent-hover text-white text-xs font-semibold transition-colors flex items-center justify-center gap-2 disabled:opacity-50 shrink-0 self-end cursor-pointer"
                 >
                   <Send className="w-3.5 h-3.5" aria-hidden="true" />
                   <span>{isStreaming ? "Analyzing..." : "Run Triage"}</span>
                 </button>
               </div>
-              <div className="text-[11px] text-graphite-400 font-mono flex items-center justify-between pt-1 border-t border-white/[0.05]">
-                <span>Active Patient: <strong className="text-graphite-200">{selectedPatientId}</strong></span>
+              <div className="text-[11px] text-ink-muted font-mono flex items-center justify-between pt-2 border-t border-hairline">
+                <span>Active Patient: <strong className="text-ink">{selectedPatientId}</strong></span>
                 <span className="hidden sm:inline">Press ⌘+Enter to analyze</span>
               </div>
             </div>
 
             {/* Empty / Ready State Guidance */}
             {!isStreaming && traceSteps.length === 0 && !clinicalSynthesis && (
-              <div className="p-6 rounded-2xl bg-graphite-900/60 border border-dashed border-white/[0.1] text-center space-y-2">
-                <div className="text-sm font-semibold text-white">
+              <div className="p-6 rounded-xl bg-surface border border-dashed border-strong text-center space-y-2">
+                <div className="text-sm font-semibold text-ink">
                   Ready for Evidence-Grounded Clinical Triage
                 </div>
-                <p className="text-xs text-graphite-400 max-w-lg mx-auto leading-relaxed">
+                <p className="text-xs text-ink-secondary max-w-lg mx-auto leading-relaxed">
                   Select a validated clinical scenario above or enter a prescription safety query, then click{" "}
-                  <strong className="text-clinical-blue">Run Triage</strong> to stream CRAG retrieval, Cockcroft-Gault renal calculations, Self-RAG claim verification, and HITL safety gates.
+                  <strong className="text-accent">Run Triage</strong> to stream CRAG retrieval, Cockcroft-Gault renal calculations, Self-RAG claim verification, and HITL safety gates.
                 </p>
               </div>
             )}
 
             {/* Override Success Banner */}
             {overrideSuccessMessage && (
-              <div className="p-3 rounded-xl bg-clinical-emerald/10 border border-clinical-emerald/20 text-xs text-clinical-emerald flex items-center gap-2">
-                <CheckCircle className="w-4 h-4" />
+              <div className="p-3.5 rounded-xl bg-emerald-50 border border-emerald-200 text-xs text-clinical-emerald flex items-center gap-2 font-medium">
+                <CheckCircle className="w-4 h-4 shrink-0" />
                 <span>{overrideSuccessMessage}</span>
               </div>
             )}
 
             {/* HITL Safety Interrupt Banner if triggered */}
             {hitlGate && hitlGate.is_required && (
-              <div className="p-4 rounded-xl bg-clinical-rose/15 border border-clinical-rose/30 flex items-center justify-between text-xs">
+              <div className="p-4 rounded-xl bg-red-50 border border-red-200 border-l-4 border-l-clinical-rose flex flex-wrap items-center justify-between gap-3 text-xs">
                 <div className="flex items-center gap-2.5 text-clinical-rose">
-                  <AlertOctagon className="w-5 h-5 text-clinical-rose shrink-0" />
+                  <AlertOctagon className="w-5 h-5 shrink-0" />
                   <div>
-                    <div className="font-semibold text-white">
+                    <div className="font-semibold text-ink">
                       Human-in-the-Loop Safety Gate Active
                     </div>
-                    <div className="text-[11px] text-clinical-rose/90 font-mono mt-0.5">
+                    <div className="text-xs text-clinical-rose font-mono mt-0.5">
                       {hitlGate.reason}
                     </div>
                   </div>
                 </div>
 
                 <button
+                  type="button"
                   onClick={() => setIsHitlModalOpen(true)}
-                  className="px-3 py-1.5 rounded-lg bg-clinical-rose text-white text-xs font-semibold hover:bg-clinical-rose/90 transition-colors shadow-lg shadow-clinical-rose/20"
+                  className="min-h-[36px] px-3.5 py-1.5 rounded-lg bg-clinical-rose text-white text-xs font-semibold hover:bg-red-800 transition-colors cursor-pointer"
                 >
-                  Review & Sign Off
+                  Review &amp; Sign Off
                 </button>
               </div>
             )}

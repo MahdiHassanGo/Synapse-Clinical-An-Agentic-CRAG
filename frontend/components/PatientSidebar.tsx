@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { User, AlertTriangle, Pill, Heart, Activity, FileText, CheckCircle2 } from "lucide-react";
+import { AlertTriangle, Pill } from "lucide-react";
 
 export interface Patient {
   patient_id: string;
@@ -63,14 +63,14 @@ export function PatientSidebar({
   loading,
 }: PatientSidebarProps) {
   return (
-    <aside className="w-full lg:w-80 xl:w-[340px] border-b lg:border-b-0 lg:border-r border-white/[0.08] bg-graphite-900/60 flex flex-col max-h-[44vh] lg:max-h-none lg:h-[calc(100vh-3.5rem)] overflow-hidden shrink-0">
+    <aside className="w-full lg:w-80 xl:w-[340px] border-b lg:border-b-0 lg:border-r border-hairline bg-surface flex flex-col max-h-[44vh] lg:max-h-none lg:h-[calc(100vh-3.5rem)] overflow-hidden shrink-0">
       {/* Patient Cohort Selector */}
-      <div className="p-4 border-b border-white/[0.08]">
-        <div className="flex items-center justify-between mb-2">
-          <span className="text-xs font-medium text-graphite-400">
+      <div className="p-4 border-b border-hairline">
+        <div className="flex items-center justify-between mb-2.5">
+          <span className="text-xs font-semibold text-ink">
             Clinical Patient Cohort
           </span>
-          <span className="text-[11px] font-mono text-graphite-400">
+          <span className="text-[11px] font-mono text-ink-muted">
             {patients.length} records
           </span>
         </div>
@@ -80,22 +80,27 @@ export function PatientSidebar({
             return (
               <button
                 key={p.patient_id}
+                type="button"
                 onClick={() => onSelectPatient(p.patient_id)}
-                className={`w-full text-left p-2.5 rounded-lg border transition-colors flex items-center justify-between ${
+                className={`w-full text-left p-2.5 rounded-lg border transition-colors flex items-center justify-between cursor-pointer ${
                   isSelected
-                    ? "bg-graphite-800 border-white/[0.15] text-white"
-                    : "bg-graphite-850/50 border-white/[0.04] text-graphite-300 hover:bg-graphite-800/50"
+                    ? "bg-accent-soft border-accent-border border-l-4 border-l-accent text-ink"
+                    : "bg-subtle/50 border-hairline text-ink-secondary hover:bg-subtle hover:text-ink"
                 }`}
               >
-                <div>
-                  <div className="text-xs font-medium">
-                    {p.first_name} {p.last_name}
-                  </div>
-                  <div className="text-[11px] text-graphite-400">
+                <div className="min-w-0">
+                  <div className="text-xs font-semibold truncate">{p.first_name} {p.last_name}</div>
+                  <div className="text-[11px] text-ink-muted">
                     {p.age}y, {p.gender} · {p.mrn}
                   </div>
                 </div>
-                <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-graphite-750 text-graphite-300 border border-white/[0.05]">
+                <span
+                  className={`text-[11px] font-mono px-1.5 py-0.5 rounded border shrink-0 ${
+                    isSelected
+                      ? "bg-surface text-accent border-accent-border font-medium"
+                      : "bg-surface text-ink-muted border-hairline"
+                  }`}
+                >
                   {p.patient_id}
                 </span>
               </button>
@@ -104,110 +109,107 @@ export function PatientSidebar({
         </div>
       </div>
 
-      {/* Selected Patient Live Telemetry */}
-      <div className="flex-1 overflow-y-auto p-4 space-y-4">
+      {/* Selected Patient Chart Summary */}
+      <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-canvas/50">
         {loading || !patientDetail ? (
-          <div className="text-xs text-graphite-400 py-6 text-center">
-            Loading patient telemetry...
+          <div className="text-xs text-ink-muted py-6 text-center">
+            Loading patient chart...
           </div>
         ) : (
           <>
             {/* Primary Diagnosis & Vitals */}
-            <div className="bg-graphite-850 border border-white/[0.08] rounded-xl p-3.5 space-y-3">
-              <div className="text-xs font-medium text-graphite-200">
+            <div className="bg-surface border border-hairline rounded-xl p-3.5 space-y-3">
+              <div className="text-xs font-semibold text-ink">
                 Primary Diagnosis
               </div>
-              <div className="text-xs text-graphite-300 leading-relaxed bg-graphite-900/80 p-2 rounded-md border border-white/[0.04]">
+              <div className="text-xs text-ink-secondary leading-relaxed bg-subtle p-2.5 rounded-lg border border-hairline">
                 {patientDetail.patient.primary_diagnosis}
               </div>
 
-              {/* Vitals Grid */}
               <div className="grid grid-cols-2 gap-2 text-xs">
-                <div className="bg-graphite-900/60 p-2 rounded-md border border-white/[0.04]">
-                  <div className="text-[10px] text-graphite-400">Blood Pressure</div>
-                  <div className="font-mono tabular-nums font-medium text-white">
+                <div className="bg-subtle p-2.5 rounded-lg border border-hairline">
+                  <div className="text-[11px] text-ink-muted">Blood Pressure</div>
+                  <div className="font-mono tabular-nums font-semibold text-ink mt-0.5">
                     {patientDetail.latest_vitals.systolic_bp}/
                     {patientDetail.latest_vitals.diastolic_bp}{" "}
-                    <span className="text-[10px] text-graphite-400">mmHg</span>
+                    <span className="text-[10px] font-normal text-ink-muted">mmHg</span>
                   </div>
                 </div>
 
-                <div className="bg-graphite-900/60 p-2 rounded-md border border-white/[0.04]">
-                  <div className="text-[10px] text-graphite-400">Heart Rate</div>
-                  <div className="font-mono tabular-nums font-medium text-white">
+                <div className="bg-subtle p-2.5 rounded-lg border border-hairline">
+                  <div className="text-[11px] text-ink-muted">Heart Rate</div>
+                  <div className="font-mono tabular-nums font-semibold text-ink mt-0.5">
                     {patientDetail.latest_vitals.heart_rate}{" "}
-                    <span className="text-[10px] text-graphite-400">bpm</span>
+                    <span className="text-[10px] font-normal text-ink-muted">bpm</span>
                   </div>
                 </div>
 
-                <div className="bg-graphite-900/60 p-2 rounded-md border border-white/[0.04]">
-                  <div className="text-[10px] text-graphite-400">SpO2</div>
-                  <div className="font-mono tabular-nums font-medium text-white">
+                <div className="bg-subtle p-2.5 rounded-lg border border-hairline">
+                  <div className="text-[11px] text-ink-muted">SpO2</div>
+                  <div className="font-mono tabular-nums font-semibold text-ink mt-0.5">
                     {patientDetail.latest_vitals.o2_saturation}%
                   </div>
                 </div>
 
-                <div className="bg-graphite-900/60 p-2 rounded-md border border-white/[0.04]">
-                  <div className="text-[10px] text-graphite-400">Body Mass / BSA</div>
-                  <div className="font-mono tabular-nums font-medium text-white">
+                <div className="bg-subtle p-2.5 rounded-lg border border-hairline">
+                  <div className="text-[11px] text-ink-muted">Body Mass</div>
+                  <div className="font-mono tabular-nums font-semibold text-ink mt-0.5">
                     {patientDetail.patient.weight_kg}{" "}
-                    <span className="text-[10px] text-graphite-400">kg</span>
+                    <span className="text-[10px] font-normal text-ink-muted">kg</span>
                   </div>
                 </div>
               </div>
             </div>
 
-            {/* Renal Function & Clinical Calculators */}
-            <div className="bg-graphite-850 border border-white/[0.08] rounded-xl p-3.5 space-y-2">
+            {/* Renal Function */}
+            <div className="bg-surface border border-hairline rounded-xl p-3.5 space-y-2.5">
               <div className="flex items-center justify-between">
-                <span className="text-xs font-medium text-graphite-200">
+                <span className="text-xs font-semibold text-ink">
                   Renal Clearance (CKD-EPI)
                 </span>
-                <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-clinical-blue/10 text-clinical-blue border border-clinical-blue/20">
+                <span className="text-[11px] font-mono px-1.5 py-0.5 rounded bg-accent-soft text-accent border border-accent-border">
                   Calculated
                 </span>
               </div>
-              <div className="bg-graphite-900/80 p-2.5 rounded-lg border border-white/[0.04] space-y-1.5">
+              <div className="bg-subtle p-2.5 rounded-lg border border-hairline space-y-1.5">
                 <div className="flex justify-between items-baseline text-xs">
-                  <span className="text-graphite-400">eGFR 2021 Race-Free</span>
-                  <span className="font-mono tabular-nums font-semibold text-white">
+                  <span className="text-ink-muted">eGFR 2021 Race-Free</span>
+                  <span className="font-mono tabular-nums font-semibold text-ink">
                     {patientDetail.renal_status.egfr_value} mL/min
                   </span>
                 </div>
                 <div className="flex justify-between items-baseline text-xs">
-                  <span className="text-graphite-400">CrCl (Cockcroft-Gault)</span>
-                  <span className="font-mono tabular-nums text-graphite-300">
+                  <span className="text-ink-muted">CrCl (Cockcroft-Gault)</span>
+                  <span className="font-mono tabular-nums text-ink-secondary">
                     {patientDetail.renal_status.crcl_value} mL/min
                   </span>
                 </div>
-                <div className="text-[11px] text-clinical-amber font-mono pt-1">
+                <div className="text-[11px] text-clinical-amber font-mono pt-1 border-t border-hairline">
                   {patientDetail.renal_status.kdigo_stage}
                 </div>
               </div>
             </div>
 
             {/* Active Medications */}
-            <div className="bg-graphite-850 border border-white/[0.08] rounded-xl p-3.5 space-y-2">
-              <div className="flex items-center gap-1.5 text-xs font-medium text-graphite-200">
-                <Pill className="w-3.5 h-3.5 text-clinical-blue" />
+            <div className="bg-surface border border-hairline rounded-xl p-3.5 space-y-2.5">
+              <div className="flex items-center gap-1.5 text-xs font-semibold text-ink">
+                <Pill className="w-3.5 h-3.5 text-accent" />
                 <span>Active Prescriptions ({patientDetail.active_medications?.length ?? 0})</span>
               </div>
               <div className="space-y-1.5">
                 {patientDetail.active_medications?.map((m, idx) => (
                   <div
                     key={idx}
-                    className="p-2 rounded bg-graphite-900/70 border border-white/[0.04] text-xs flex justify-between items-center"
+                    className="p-2.5 rounded-lg bg-subtle border border-hairline text-xs flex justify-between items-center gap-2"
                   >
-                    <div>
-                      <div className="font-medium text-graphite-200">
-                        {m.drug_name}
-                      </div>
-                      <div className="text-[11px] text-graphite-400">
+                    <div className="min-w-0">
+                      <div className="font-medium text-ink truncate">{m.drug_name}</div>
+                      <div className="text-[11px] text-ink-muted">
                         {m.dosage} · {m.frequency}
                       </div>
                     </div>
-                    <span className="text-[10px] text-graphite-400 font-mono">
-                      {m.indication.slice(0, 15)}...
+                    <span className="text-[11px] text-ink-muted font-mono shrink-0 truncate max-w-[110px]">
+                      {m.indication}
                     </span>
                   </div>
                 ))}
@@ -216,8 +218,8 @@ export function PatientSidebar({
 
             {/* Allergies */}
             {(patientDetail.allergies?.length ?? 0) > 0 && (
-              <div className="bg-graphite-850 border border-white/[0.08] rounded-xl p-3.5 space-y-2">
-                <div className="flex items-center gap-1.5 text-xs font-medium text-clinical-rose">
+              <div className="bg-surface border border-red-200 rounded-xl p-3.5 space-y-2">
+                <div className="flex items-center gap-1.5 text-xs font-semibold text-clinical-rose">
                   <AlertTriangle className="w-3.5 h-3.5" />
                   <span>Documented Allergies</span>
                 </div>
@@ -225,15 +227,13 @@ export function PatientSidebar({
                   {patientDetail.allergies?.map((a, idx) => (
                     <div
                       key={idx}
-                      className="p-2 rounded bg-clinical-rose/10 border border-clinical-rose/20 text-xs"
+                      className="p-2.5 rounded-lg bg-red-50 border border-red-200 text-xs"
                     >
-                      <div className="font-medium text-clinical-rose flex justify-between">
+                      <div className="font-semibold text-clinical-rose flex justify-between">
                         <span>{a.allergen}</span>
-                        <span className="text-[10px] uppercase font-mono">
-                          {a.severity}
-                        </span>
+                        <span className="text-[11px] font-mono">{a.severity}</span>
                       </div>
-                      <div className="text-[11px] text-graphite-300 mt-0.5">
+                      <div className="text-[11px] text-ink-secondary mt-0.5">
                         {a.reaction}
                       </div>
                     </div>

@@ -193,47 +193,46 @@ export function KnowledgeBaseView() {
   const totalChunks = documents.reduce((sum, d) => sum + (d.chunk_count ?? d.section_count ?? 0), 0);
 
   return (
-    <div className="flex-1 overflow-y-auto p-6 space-y-6 max-w-7xl mx-auto w-full font-sans">
+    <div className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-6 max-w-7xl mx-auto w-full font-sans bg-canvas text-ink">
       {/* Title & Stats */}
-      <div className="flex flex-wrap items-center justify-between gap-4 pb-4 border-b border-white/[0.08]">
+      <div className="flex flex-wrap items-center justify-between gap-4 pb-4 border-b border-hairline">
         <div>
-          <h1 className="text-lg font-bold text-white flex items-center gap-2">
-            <Database className="w-5 h-5 text-clinical-blue" />
-            <span>Clinical Knowledge Base & Document Ingestion</span>
+          <h1 className="text-lg font-semibold text-ink flex items-center gap-2">
+            <Database className="w-5 h-5 text-accent" />
+            <span>Clinical Knowledge Base &amp; Document Ingestion</span>
           </h1>
-          <p className="text-xs text-graphite-400 mt-1">
+          <p className="text-xs text-ink-muted mt-1">
             Hierarchical parent-child chunking with dense vector indexing and BM25 hybrid storage.
           </p>
         </div>
 
         <div className="flex items-center gap-3">
-          <div className="px-3.5 py-1.5 rounded-xl bg-graphite-900 border border-white/[0.08] text-right">
-            <span className="text-[10px] uppercase font-mono text-graphite-500 block">
+          <div className="px-3.5 py-1.5 rounded-lg bg-surface border border-hairline text-right">
+            <span className="text-[11px] font-mono text-ink-muted block">
               Verified Documents
             </span>
-            <span className="text-sm font-bold font-mono text-white tabular-nums">
+            <span className="text-sm font-bold font-mono text-ink tabular-nums">
               {documents.length}
             </span>
           </div>
 
-          <div className="px-3.5 py-1.5 rounded-xl bg-graphite-900 border border-white/[0.08] text-right">
-            <span className="text-[10px] uppercase font-mono text-graphite-500 block">
+          <div className="px-3.5 py-1.5 rounded-lg bg-surface border border-hairline text-right">
+            <span className="text-[11px] font-mono text-ink-muted block">
               Total Chunks
             </span>
-            <span className="text-sm font-bold font-mono text-clinical-teal tabular-nums">
+            <span className="text-sm font-bold font-mono text-accent tabular-nums">
               {totalChunks}
             </span>
           </div>
         </div>
       </div>
 
-      {/* Feedback banner */}
       {feedback && (
         <div
           className={`p-3 rounded-xl border text-xs flex items-center gap-2 ${
             feedback.type === "success"
-              ? "bg-clinical-emerald/10 border-clinical-emerald/30 text-clinical-emerald"
-              : "bg-clinical-rose/10 border-clinical-rose/30 text-clinical-rose"
+              ? "bg-emerald-50 border-emerald-200 text-clinical-emerald"
+              : "bg-red-50 border-red-200 text-clinical-rose"
           }`}
         >
           {feedback.type === "success" ? (
@@ -246,27 +245,29 @@ export function KnowledgeBaseView() {
       )}
 
       {/* Ingestion Panels (PDF or URL) */}
-      <div className="bg-graphite-900 border border-white/[0.08] rounded-2xl p-5 space-y-4 shadow-xl">
-        <div className="flex items-center justify-between border-b border-white/[0.06] pb-3">
-          <span className="text-xs font-semibold text-white">Ingest New Clinical Protocol</span>
-          <div className="flex items-center gap-1 bg-graphite-850 p-1 rounded-lg border border-white/[0.06]">
+      <div className="bg-surface border border-hairline rounded-xl p-5 space-y-4">
+        <div className="flex flex-wrap items-center justify-between gap-2 border-b border-hairline pb-3">
+          <span className="text-xs font-semibold text-ink">Ingest New Clinical Protocol</span>
+          <div className="flex items-center gap-1 bg-subtle p-1 rounded-lg border border-hairline">
             <button
+              type="button"
               onClick={() => setActiveTab("upload")}
-              className={`px-3 py-1 rounded text-xs font-medium transition-colors flex items-center gap-1.5 ${
+              className={`px-3 py-1 rounded-md text-xs font-medium transition-colors flex items-center gap-1.5 cursor-pointer ${
                 activeTab === "upload"
-                  ? "bg-graphite-750 text-white"
-                  : "text-graphite-400 hover:text-white"
+                  ? "bg-surface text-ink shadow-sm border border-hairline"
+                  : "text-ink-muted hover:text-ink"
               }`}
             >
               <Upload className="w-3 h-3" />
               <span>PDF Document</span>
             </button>
             <button
+              type="button"
               onClick={() => setActiveTab("url")}
-              className={`px-3 py-1 rounded text-xs font-medium transition-colors flex items-center gap-1.5 ${
+              className={`px-3 py-1 rounded-md text-xs font-medium transition-colors flex items-center gap-1.5 cursor-pointer ${
                 activeTab === "url"
-                  ? "bg-graphite-750 text-white"
-                  : "text-graphite-400 hover:text-white"
+                  ? "bg-surface text-ink shadow-sm border border-hairline"
+                  : "text-ink-muted hover:text-ink"
               }`}
             >
               <Globe className="w-3 h-3" />
@@ -279,7 +280,7 @@ export function KnowledgeBaseView() {
           <form onSubmit={handleUploadPDF} className="space-y-4">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
               <div>
-                <label className="text-[11px] font-medium text-graphite-400 block mb-1">
+                <label className="text-xs font-medium text-ink-secondary block mb-1">
                   Document Title
                 </label>
                 <input
@@ -287,13 +288,13 @@ export function KnowledgeBaseView() {
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
                   placeholder="e.g. NICE NG28 Type 2 Diabetes"
-                  className="w-full bg-graphite-850 border border-white/[0.08] rounded-xl px-3 py-2 text-xs text-white placeholder-graphite-500 focus:outline-none focus:border-clinical-blue"
+                  className="w-full bg-subtle border border-strong rounded-lg px-3 py-2 text-xs text-ink placeholder-ink-muted focus:outline-none focus:border-accent"
                   required
                 />
               </div>
 
               <div>
-                <label className="text-[11px] font-medium text-graphite-400 block mb-1">
+                <label className="text-xs font-medium text-ink-secondary block mb-1">
                   Issuing Authority
                 </label>
                 <input
@@ -301,12 +302,12 @@ export function KnowledgeBaseView() {
                   value={organization}
                   onChange={(e) => setOrganization(e.target.value)}
                   placeholder="NICE, KDIGO, WHO, BMDC"
-                  className="w-full bg-graphite-850 border border-white/[0.08] rounded-xl px-3 py-2 text-xs text-white placeholder-graphite-500 focus:outline-none focus:border-clinical-blue"
+                  className="w-full bg-subtle border border-strong rounded-lg px-3 py-2 text-xs text-ink placeholder-ink-muted focus:outline-none focus:border-accent"
                 />
               </div>
 
               <div>
-                <label className="text-[11px] font-medium text-graphite-400 block mb-1">
+                <label className="text-xs font-medium text-ink-secondary block mb-1">
                   Publication Year
                 </label>
                 <input
@@ -314,20 +315,20 @@ export function KnowledgeBaseView() {
                   value={pubDate}
                   onChange={(e) => setPubDate(e.target.value)}
                   placeholder="2024"
-                  className="w-full bg-graphite-850 border border-white/[0.08] rounded-xl px-3 py-2 text-xs text-white placeholder-graphite-500 focus:outline-none focus:border-clinical-blue"
+                  className="w-full bg-subtle border border-strong rounded-lg px-3 py-2 text-xs text-ink placeholder-ink-muted focus:outline-none focus:border-accent"
                 />
               </div>
             </div>
 
             <div>
-              <label className="text-[11px] font-medium text-graphite-400 block mb-1">
+              <label className="text-xs font-medium text-ink-secondary block mb-1">
                 Select PDF File
               </label>
               <input
                 type="file"
                 accept=".pdf"
                 onChange={(e) => setFile(e.target.files?.[0] || null)}
-                className="w-full bg-graphite-850 border border-white/[0.08] rounded-xl p-2 text-xs text-graphite-300 file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:bg-graphite-750 file:text-white hover:file:bg-graphite-700 cursor-pointer"
+                className="w-full bg-subtle border border-strong rounded-lg p-2 text-xs text-ink-secondary file:mr-3 file:py-1.5 file:px-3 file:rounded-md file:border file:border-hairline file:text-xs file:bg-surface file:text-ink hover:file:bg-muted cursor-pointer"
                 required
               />
             </div>
@@ -335,7 +336,7 @@ export function KnowledgeBaseView() {
             <button
               type="submit"
               disabled={isSubmitting}
-              className="px-4 py-2 rounded-xl bg-clinical-blue hover:bg-clinical-blue/90 text-white text-xs font-medium transition-colors flex items-center gap-1.5 disabled:opacity-50"
+              className="px-4 py-2 rounded-lg bg-accent hover:bg-accent-hover text-white text-xs font-semibold transition-colors flex items-center gap-1.5 disabled:opacity-50 cursor-pointer"
             >
               <Upload className="w-3.5 h-3.5" />
               <span>{isSubmitting ? "Ingesting & Chunking..." : "Upload & Index PDF"}</span>
@@ -345,7 +346,7 @@ export function KnowledgeBaseView() {
           <form onSubmit={handleIngestURL} className="space-y-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
               <div>
-                <label className="text-[11px] font-medium text-graphite-400 block mb-1">
+                <label className="text-xs font-medium text-ink-secondary block mb-1">
                   Document Title
                 </label>
                 <input
@@ -353,13 +354,13 @@ export function KnowledgeBaseView() {
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
                   placeholder="e.g. KDIGO 2024 Clinical Practice Guideline"
-                  className="w-full bg-graphite-850 border border-white/[0.08] rounded-xl px-3 py-2 text-xs text-white placeholder-graphite-500 focus:outline-none focus:border-clinical-blue"
+                  className="w-full bg-subtle border border-strong rounded-lg px-3 py-2 text-xs text-ink placeholder-ink-muted focus:outline-none focus:border-accent"
                   required
                 />
               </div>
 
               <div>
-                <label className="text-[11px] font-medium text-graphite-400 block mb-1">
+                <label className="text-xs font-medium text-ink-secondary block mb-1">
                   Issuing Organization
                 </label>
                 <input
@@ -367,13 +368,13 @@ export function KnowledgeBaseView() {
                   value={organization}
                   onChange={(e) => setOrganization(e.target.value)}
                   placeholder="WHO, NICE, KDIGO"
-                  className="w-full bg-graphite-850 border border-white/[0.08] rounded-xl px-3 py-2 text-xs text-white placeholder-graphite-500 focus:outline-none focus:border-clinical-blue"
+                  className="w-full bg-subtle border border-strong rounded-lg px-3 py-2 text-xs text-ink placeholder-ink-muted focus:outline-none focus:border-accent"
                 />
               </div>
             </div>
 
             <div>
-              <label className="text-[11px] font-medium text-graphite-400 block mb-1">
+              <label className="text-xs font-medium text-ink-secondary block mb-1">
                 Official Guideline URL
               </label>
               <input
@@ -381,7 +382,7 @@ export function KnowledgeBaseView() {
                 value={url}
                 onChange={(e) => setUrl(e.target.value)}
                 placeholder="https://www.nice.org.uk/guidance/ng28"
-                className="w-full bg-graphite-850 border border-white/[0.08] rounded-xl px-3 py-2 text-xs text-white placeholder-graphite-500 focus:outline-none focus:border-clinical-blue"
+                className="w-full bg-subtle border border-strong rounded-lg px-3 py-2 text-xs text-ink placeholder-ink-muted focus:outline-none focus:border-accent"
                 required
               />
             </div>
@@ -389,7 +390,7 @@ export function KnowledgeBaseView() {
             <button
               type="submit"
               disabled={isSubmitting}
-              className="px-4 py-2 rounded-xl bg-clinical-blue hover:bg-clinical-blue/90 text-white text-xs font-medium transition-colors flex items-center gap-1.5 disabled:opacity-50"
+              className="px-4 py-2 rounded-lg bg-accent hover:bg-accent-hover text-white text-xs font-semibold transition-colors flex items-center gap-1.5 disabled:opacity-50 cursor-pointer"
             >
               <Globe className="w-3.5 h-3.5" />
               <span>{isSubmitting ? "Scraping & Indexing..." : "Fetch & Ingest URL"}</span>
@@ -399,48 +400,48 @@ export function KnowledgeBaseView() {
       </div>
 
       {/* Ingested Documents Table */}
-      <div className="bg-graphite-900 border border-white/[0.08] rounded-2xl p-5 space-y-4 shadow-xl">
-        <div className="flex items-center justify-between pb-2 border-b border-white/[0.06]">
-          <span className="text-xs font-semibold text-white">
-            Ingested Clinical Guidelines & Protocols
+      <div className="bg-surface border border-hairline rounded-xl p-5 space-y-4">
+        <div className="flex flex-wrap items-center justify-between gap-2 pb-2.5 border-b border-hairline">
+          <span className="text-xs font-semibold text-ink">
+            Ingested Clinical Guidelines &amp; Protocols
           </span>
-          <span className="text-[11px] font-mono text-graphite-400">
+          <span className="text-[11px] font-mono text-ink-muted">
             {documents.length} guidelines stored in pgvector
           </span>
         </div>
 
         {loading ? (
-          <div className="text-center py-8 text-xs text-graphite-400 font-mono">
+          <div className="text-center py-8 text-xs text-ink-muted font-mono">
             Loading knowledge documents...
           </div>
         ) : documents.length === 0 ? (
-          <div className="text-center py-8 text-xs text-graphite-400">
+          <div className="text-center py-8 text-xs text-ink-muted">
             No clinical guidelines ingested yet.
           </div>
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full text-left text-xs">
               <thead>
-                <tr className="border-b border-white/[0.06] text-graphite-400 font-mono text-[11px]">
-                  <th className="pb-2.5 font-normal">Document UID</th>
-                  <th className="pb-2.5 font-normal">Title & Authority</th>
-                  <th className="pb-2.5 font-normal">Access Policy</th>
-                  <th className="pb-2.5 font-normal">Sections</th>
-                  <th className="pb-2.5 font-normal">Chunks</th>
-                  <th className="pb-2.5 font-normal">Indexed</th>
-                  <th className="pb-2.5 font-normal text-right">Actions</th>
+                <tr className="border-b border-hairline text-ink-muted font-mono text-[11px]">
+                  <th className="pb-2.5 font-medium">Document UID</th>
+                  <th className="pb-2.5 font-medium">Title &amp; Authority</th>
+                  <th className="pb-2.5 font-medium">Access Policy</th>
+                  <th className="pb-2.5 font-medium">Sections</th>
+                  <th className="pb-2.5 font-medium">Chunks</th>
+                  <th className="pb-2.5 font-medium">Date</th>
+                  <th className="pb-2.5 font-medium text-right">Actions</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-white/[0.04]">
+              <tbody className="divide-y divide-hairline">
                 {documents.map((doc) => (
-                  <tr key={doc.doc_id} className="hover:bg-white/[0.01]">
-                    <td className="py-3 font-mono text-[11px] text-clinical-blue">
+                  <tr key={doc.doc_id} className="hover:bg-subtle/60 transition-colors">
+                    <td className="py-3 font-mono text-[11px] text-accent font-medium">
                       {doc.doc_id}
                     </td>
                     <td className="py-3">
-                      <div className="font-medium text-white">{doc.title}</div>
-                      <div className="flex items-center gap-2 mt-0.5 text-[11px] text-graphite-400">
-                        <span className="px-1.5 py-0.2 rounded bg-graphite-800 text-graphite-300 border border-white/[0.04]">
+                      <div className="font-medium text-ink">{doc.title}</div>
+                      <div className="flex items-center gap-2 mt-0.5 text-[11px] text-ink-muted">
+                        <span className="px-1.5 py-0.5 rounded bg-subtle text-ink-secondary border border-hairline">
                           {doc.source_organization}
                         </span>
                         <span>{doc.publication_date}</span>
@@ -449,46 +450,48 @@ export function KnowledgeBaseView() {
                             href={doc.source_url}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="text-clinical-blue hover:underline inline-flex items-center gap-0.5"
+                            className="text-accent hover:underline inline-flex items-center gap-0.5"
                           >
                             <span>source</span>
-                            <ExternalLink className="w-2.5 h-2.5" />
+                            <ExternalLink className="w-3 h-3" />
                           </a>
                         )}
                       </div>
                     </td>
                     <td className="py-3 font-mono">
                       <span
-                        className={`text-[9px] px-1.5 py-0.5 rounded border font-mono font-medium ${
+                        className={`text-[11px] px-2 py-0.5 rounded border font-mono font-medium ${
                           doc.access_level === "PATIENT_APPROVED"
-                            ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/20"
-                            : "bg-clinical-blue/10 text-clinical-blue border-clinical-blue/20"
+                            ? "bg-emerald-50 text-clinical-emerald border-emerald-200"
+                            : "bg-accent-soft text-accent border-accent-border"
                         }`}
                       >
                         {doc.access_level || "CLINICIAN_ONLY"}
                       </span>
                     </td>
-                    <td className="py-3 font-mono text-graphite-300 tabular-nums">
+                    <td className="py-3 font-mono text-ink-secondary tabular-nums">
                       {doc.section_count ?? doc.chunk_count ?? 0}
                     </td>
-                    <td className="py-3 font-mono text-clinical-teal font-semibold tabular-nums">
+                    <td className="py-3 font-mono text-accent font-semibold tabular-nums">
                       {doc.chunk_count ?? doc.section_count ?? 0}
                     </td>
-                    <td className="py-3 font-mono text-[11px] text-graphite-400">
-                      {doc.ingestion_timestamp}
+                    <td className="py-3 font-mono text-[11px] text-ink-muted">
+                      {doc.ingestion_timestamp || doc.publication_date}
                     </td>
-                    <td className="py-3 text-right space-x-2">
+                    <td className="py-3 text-right space-x-2 whitespace-nowrap">
                       <button
+                        type="button"
                         onClick={() => handleInspect(doc.doc_id)}
-                        className="px-2.5 py-1 rounded-lg bg-graphite-800 hover:bg-graphite-750 text-graphite-200 text-[11px] transition-colors inline-flex items-center gap-1"
+                        className="px-2.5 py-1 rounded-md bg-subtle hover:bg-muted text-ink-secondary hover:text-ink border border-hairline text-[11px] transition-colors inline-flex items-center gap-1 cursor-pointer"
                         title="Inspect Chunks"
                       >
-                        <Eye className="w-3 h-3 text-clinical-blue" />
+                        <Eye className="w-3 h-3 text-accent" />
                         <span>Inspect</span>
                       </button>
                       <button
+                        type="button"
                         onClick={() => handleDelete(doc.doc_id)}
-                        className="px-2.5 py-1 rounded-lg bg-graphite-800 hover:bg-clinical-rose/20 text-graphite-400 hover:text-clinical-rose text-[11px] transition-colors inline-flex items-center gap-1"
+                        className="px-2 py-1 rounded-md bg-subtle hover:bg-red-50 text-ink-muted hover:text-clinical-rose border border-hairline text-[11px] transition-colors inline-flex items-center gap-1 cursor-pointer"
                         title="Delete Document"
                       >
                         <Trash2 className="w-3 h-3" />
@@ -504,20 +507,26 @@ export function KnowledgeBaseView() {
 
       {/* Chunk Inspection Slide-Over Drawer */}
       {selectedDocId && (
-        <div className="fixed inset-y-0 right-0 z-50 w-full max-w-xl bg-graphite-900 border-l border-white/[0.1] shadow-2xl flex flex-col">
-          <div className="h-14 border-b border-white/[0.08] px-5 flex items-center justify-between bg-graphite-850">
+        <div
+          role="dialog"
+          aria-label="Hierarchical Chunks Inspector"
+          className="fixed inset-y-0 right-0 z-50 w-full max-w-xl bg-surface border-l border-hairline shadow-xl flex flex-col"
+        >
+          <div className="h-14 border-b border-hairline px-5 flex items-center justify-between bg-subtle">
             <div className="flex items-center gap-2">
-              <Layers className="w-4 h-4 text-clinical-blue" />
+              <Layers className="w-4 h-4 text-accent" />
               <div>
-                <h3 className="text-xs font-semibold text-white">Hierarchical Chunks Inspector</h3>
-                <span className="text-[10px] font-mono text-graphite-400">
+                <h3 className="text-xs font-semibold text-ink">Hierarchical Chunks Inspector</h3>
+                <span className="text-[11px] font-mono text-ink-muted">
                   Document UID: {selectedDocId} ({inspectChunks.length} chunks)
                 </span>
               </div>
             </div>
             <button
+              type="button"
               onClick={() => setSelectedDocId(null)}
-              className="text-graphite-400 hover:text-white p-1 rounded"
+              aria-label="Close chunk inspector"
+              className="text-ink-muted hover:text-ink p-1.5 rounded-md hover:bg-muted cursor-pointer"
             >
               <X className="w-4 h-4" />
             </button>
@@ -525,44 +534,48 @@ export function KnowledgeBaseView() {
 
           <div className="flex-1 overflow-y-auto p-5 space-y-4">
             {loadingChunks ? (
-              <div className="text-center py-12 text-xs font-mono text-graphite-400">
+              <div className="text-center py-12 text-xs font-mono text-ink-muted">
                 Loading chunk records from vector store...
               </div>
             ) : inspectChunks.length === 0 ? (
-              <div className="text-center py-12 text-xs text-graphite-400">
+              <div className="text-center py-12 text-xs text-ink-muted">
                 No chunks found for this document.
               </div>
             ) : (
               inspectChunks.map((chunk, idx) => (
                 <div
                   key={idx}
-                  className="bg-graphite-850 border border-white/[0.06] rounded-xl p-4 space-y-2 text-xs"
+                  className="bg-subtle border border-hairline rounded-xl p-4 space-y-2 text-xs"
                 >
-                  <div className="flex items-center justify-between pb-1.5 border-b border-white/[0.04]">
+                  <div className="flex items-center justify-between pb-1.5 border-b border-hairline">
                     <div className="flex items-center gap-2">
-                      <span className="font-mono text-[11px] text-clinical-blue">
+                      <span className="font-mono text-[11px] text-accent font-medium">
                         {chunk.chunk_id}
                       </span>
                       {(chunk.parent_id || chunk.parent_chunk_id) && (
-                        <span className="text-[10px] font-mono text-graphite-500">
+                        <span className="text-[10px] font-mono text-ink-muted">
                           parent: {chunk.parent_id || chunk.parent_chunk_id}
                         </span>
                       )}
                     </div>
-                    <span className="text-[10px] font-mono text-graphite-400">
+                    <span className="text-[11px] font-mono text-ink-muted">
                       {chunk.token_count} tokens
                     </span>
                   </div>
 
-                  <div className="text-[11px] font-medium text-white">{chunk.section}</div>
+                  {chunk.section && (
+                    <div className="text-xs font-medium text-ink">{chunk.section}</div>
+                  )}
 
-                  <div className="bg-graphite-950 p-3 rounded-lg border border-white/[0.04] text-[11px] text-graphite-300 leading-relaxed font-sans whitespace-pre-line">
+                  <div className="bg-surface p-3 rounded-lg border border-hairline text-xs text-ink-secondary leading-relaxed font-sans whitespace-pre-line">
                     {chunk.content}
                   </div>
 
-                  <div className="text-[10px] font-mono text-graphite-500 truncate">
-                    SHA-256 Hash: {chunk.content_hash}
-                  </div>
+                  {chunk.content_hash && (
+                    <div className="text-[10px] font-mono text-ink-muted truncate">
+                      SHA-256 Hash: {chunk.content_hash}
+                    </div>
+                  )}
                 </div>
               ))
             )}

@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { AlertOctagon, CheckCircle2, ShieldAlert, X } from "lucide-react";
+import { AlertOctagon, X } from "lucide-react";
 
 export interface DrugInteractionAlert {
   drug_a: string;
@@ -40,15 +40,17 @@ export function PharmacovigilanceModal({
 }: PharmacovigilanceModalProps) {
   const [clinicianId, setClinicianId] = useState("DR-9921");
   const [rationale, setRationale] = useState("");
+  const [validationError, setValidationError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   if (!isOpen || !hitlData) return null;
 
   const handleAction = async (approved: boolean) => {
     if (approved && !rationale.trim()) {
-      alert("Mandatory clinical override rationale is required by regulatory guidelines.");
+      setValidationError("Mandatory clinical override rationale is required by regulatory guidelines.");
       return;
     }
+    setValidationError(null);
     setIsSubmitting(true);
     try {
       await onConfirmOverride(clinicianId, rationale, approved);
@@ -59,24 +61,31 @@ export function PharmacovigilanceModal({
   };
 
   return (
-    <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4">
-      <div className="bg-graphite-900 border border-clinical-rose/40 rounded-2xl w-full max-w-xl shadow-2xl overflow-hidden">
+    <div
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="hitl-modal-title"
+      className="fixed inset-0 z-50 bg-ink/40 backdrop-blur-[2px] flex items-center justify-center p-4"
+    >
+      <div className="bg-surface border border-red-300 rounded-xl w-full max-w-xl shadow-xl overflow-hidden">
         {/* Modal Header */}
-        <div className="bg-clinical-rose/15 border-b border-clinical-rose/25 px-5 py-4 flex items-center justify-between">
+        <div className="bg-red-50 border-b border-red-200 px-5 py-4 flex items-center justify-between">
           <div className="flex items-center gap-2.5 text-clinical-rose">
-            <AlertOctagon className="w-5 h-5 text-clinical-rose" />
+            <AlertOctagon className="w-5 h-5 shrink-0" />
             <div>
-              <h3 className="text-sm font-semibold text-white">
+              <h3 id="hitl-modal-title" className="text-sm font-semibold text-ink">
                 Human-in-the-Loop Safety Gate Intercept
               </h3>
-              <p className="text-[11px] text-clinical-rose/90 font-mono">
-                Regulated High-Risk Intervention Paused
+              <p className="text-xs text-clinical-rose font-mono">
+                Regulated high-risk intervention paused
               </p>
             </div>
           </div>
           <button
+            type="button"
             onClick={onClose}
-            className="text-graphite-400 hover:text-white p-1 rounded"
+            aria-label="Close safety gate dialog"
+            className="text-ink-muted hover:text-ink p-1.5 rounded-md hover:bg-red-100/60 transition-colors cursor-pointer"
           >
             <X className="w-4 h-4" />
           </button>
@@ -84,38 +93,35 @@ export function PharmacovigilanceModal({
 
         {/* Modal Body */}
         <div className="p-5 space-y-4 text-xs">
-          <div className="bg-graphite-850 p-3 rounded-lg border border-white/[0.06] space-y-1">
-            <div className="text-graphite-400">Trigger Reason</div>
-            <div className="text-graphite-200 leading-relaxed font-mono text-[11px]">
+          <div className="bg-subtle p-3.5 rounded-lg border border-hairline space-y-1">
+            <div className="text-ink-muted font-medium">Trigger Reason</div>
+            <div className="text-ink leading-relaxed font-mono text-xs">
               {hitlData.reason}
             </div>
           </div>
 
-          {/* Contraindications List */}
           {(hitlData.contraindications_detected?.length ?? 0) > 0 && (
             <div className="space-y-2">
-              <span className="text-graphite-400 font-medium">
+              <span className="text-ink-secondary font-semibold block">
                 Detected High-Risk Contraindications
               </span>
               <div className="space-y-2 max-h-48 overflow-y-auto">
                 {hitlData.contraindications_detected?.map((alert, idx) => (
                   <div
                     key={idx}
-                    className="p-3 rounded-lg bg-graphite-850 border border-white/[0.06] space-y-1"
+                    className="p-3 rounded-lg bg-red-50/70 border border-red-200 space-y-1.5"
                   >
-                    <div className="flex items-center justify-between">
-                      <span className="font-semibold text-white">
+                    <div className="flex items-center justify-between gap-2">
+                      <span className="font-semibold text-ink">
                         {alert.drug_a} {alert.drug_b ? `+ ${alert.drug_b}` : ""}
                       </span>
-                      <span className="px-1.5 py-0.5 rounded text-[10px] font-mono bg-clinical-rose/20 text-clinical-rose border border-clinical-rose/30">
+                      <span className="px-2 py-0.5 rounded text-[11px] font-mono bg-clinical-rose text-white">
                         {alert.severity}
                       </span>
                     </div>
-                    <div className="text-[11px] text-graphite-300">
-                      {alert.mechanism}
-                    </div>
-                    <div className="text-[11px] text-clinical-teal font-mono">
-                      Action: {alert.clinical_recommendation}
+                    <div className="text-xs text-ink-secondary">{alert.mechanism}</div>
+                    <div className="text-xs text-accent font-mono">
+                      Recommendation: {alert.clinical_recommendation}
                     </div>
                   </div>
                 ))}
@@ -124,57 +130,74 @@ export function PharmacovigilanceModal({
           )}
 
           {/* Clinician Override Input */}
-          <div className="space-y-3 pt-2 border-t border-white/[0.06]">
-            <div className="grid grid-cols-2 gap-3">
+          <div className="space-y-3 pt-3 border-t border-hairline">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <div>
-                <label className="text-graphite-400 text-[11px]">Physician NPI / ID</label>
+                <label htmlFor="hitl-clinician-id" className="text-ink-secondary font-medium text-xs block">
+                  Physician NPI / ID
+                </label>
                 <input
+                  id="hitl-clinician-id"
                   type="text"
                   value={clinicianId}
                   onChange={(e) => setClinicianId(e.target.value)}
-                  className="w-full mt-1 bg-graphite-800 border border-white/[0.1] rounded px-2.5 py-1.5 text-xs text-white font-mono focus:outline-none focus:border-clinical-blue"
+                  className="w-full mt-1 bg-subtle border border-strong rounded-lg px-2.5 py-2 text-xs text-ink font-mono focus:outline-none focus:border-accent"
                 />
               </div>
               <div>
-                <label className="text-graphite-400 text-[11px]">Target Patient</label>
+                <label htmlFor="hitl-target-patient" className="text-ink-secondary font-medium text-xs block">
+                  Target Patient
+                </label>
                 <input
+                  id="hitl-target-patient"
                   type="text"
                   disabled
                   value={patientId}
-                  className="w-full mt-1 bg-graphite-850 border border-white/[0.06] rounded px-2.5 py-1.5 text-xs text-graphite-400 font-mono"
+                  className="w-full mt-1 bg-muted border border-hairline rounded-lg px-2.5 py-2 text-xs text-ink-muted font-mono"
                 />
               </div>
             </div>
 
             <div>
-              <label className="text-graphite-400 text-[11px]">
+              <label htmlFor="hitl-rationale" className="text-ink-secondary font-medium text-xs block">
                 Clinical Justification / Mitigation Rationale (Mandatory for Override)
               </label>
               <textarea
+                id="hitl-rationale"
                 rows={2}
                 placeholder="e.g., Co-prescribed high-dose PPI, scheduled 48h renal and coagulation telemetry labs..."
                 value={rationale}
-                onChange={(e) => setRationale(e.target.value)}
-                className="w-full mt-1 bg-graphite-800 border border-white/[0.1] rounded p-2 text-xs text-white placeholder-graphite-500 focus:outline-none focus:border-clinical-blue resize-none"
+                onChange={(e) => {
+                  setRationale(e.target.value);
+                  if (validationError) setValidationError(null);
+                }}
+                className="w-full mt-1 bg-subtle border border-strong rounded-lg p-2.5 text-xs text-ink placeholder-ink-muted focus:outline-none focus:border-accent resize-none"
               />
+              {validationError && (
+                <p role="alert" className="mt-1.5 text-xs text-clinical-rose font-medium">
+                  {validationError}
+                </p>
+              )}
             </div>
           </div>
         </div>
 
         {/* Modal Footer */}
-        <div className="bg-graphite-850/80 px-5 py-3 border-t border-white/[0.06] flex items-center justify-between text-xs">
+        <div className="bg-subtle px-5 py-3.5 border-t border-hairline flex flex-wrap items-center justify-between gap-2 text-xs">
           <button
+            type="button"
             onClick={() => handleAction(false)}
             disabled={isSubmitting}
-            className="px-3 py-1.5 rounded-lg border border-clinical-rose/40 text-clinical-rose hover:bg-clinical-rose/10 font-medium transition-colors"
+            className="min-h-[38px] px-3.5 py-1.5 rounded-lg border border-red-300 bg-surface text-clinical-rose hover:bg-red-50 font-semibold transition-colors cursor-pointer"
           >
             Halt Prescription (Recommended)
           </button>
 
           <button
+            type="button"
             onClick={() => handleAction(true)}
             disabled={isSubmitting}
-            className="px-4 py-1.5 rounded-lg bg-graphite-700 hover:bg-graphite-600 border border-white/[0.1] text-white font-medium transition-colors"
+            className="min-h-[38px] px-4 py-1.5 rounded-lg bg-ink hover:bg-ink-secondary text-white font-semibold transition-colors cursor-pointer"
           >
             Authorize Clinical Override
           </button>

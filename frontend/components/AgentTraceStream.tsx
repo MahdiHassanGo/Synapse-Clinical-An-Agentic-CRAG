@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { CheckCircle2, Clock, GitCommit, Search, ShieldAlert, Cpu } from "lucide-react";
+import { CheckCircle2, Clock, GitCommit, Cpu } from "lucide-react";
 
 export interface TraceStep {
   step_name: string;
@@ -27,29 +27,29 @@ export function AgentTraceStream({
   if (steps.length === 0) return null;
 
   return (
-    <div className="bg-graphite-900 border border-white/[0.08] rounded-xl p-4 space-y-3">
-      <div className="flex items-center justify-between pb-2 border-b border-white/[0.06]">
+    <div className="bg-surface border border-hairline rounded-xl p-4 space-y-3">
+      <div className="flex items-center justify-between pb-2.5 border-b border-hairline">
         <div className="flex items-center gap-2">
-          <Cpu className="w-4 h-4 text-clinical-blue" />
-          <span className="text-xs font-medium text-graphite-200">
-            Autonomous Agentic Reasoning Trace
+          <Cpu className="w-4 h-4 text-accent" />
+          <span className="text-xs font-semibold text-ink">
+            Agentic Reasoning Execution Trace
           </span>
         </div>
-        <div className="flex items-center gap-3 text-[11px] font-mono text-graphite-400">
+        <div className="flex items-center gap-3 text-xs font-mono text-ink-muted tabular-nums">
           <span>CRAG Loops: {cragIterations}</span>
           <span>·</span>
-          <span>{totalLatencyMs.toFixed(0)} ms total</span>
+          <span>{(totalLatencyMs ?? 0).toFixed(0)} ms total</span>
         </div>
       </div>
 
       {/* Query Rewriting Notice if Loop occurred */}
       {rewrittenQueries.length > 0 && (
-        <div className="bg-graphite-850 border border-clinical-blue/20 rounded-lg p-2.5 text-xs space-y-1">
-          <div className="text-clinical-blue font-medium flex items-center gap-1.5">
+        <div className="bg-accent-soft border border-accent-border rounded-lg p-3 text-xs space-y-1">
+          <div className="text-accent font-medium flex items-center gap-1.5">
             <GitCommit className="w-3.5 h-3.5" />
-            <span>CRAG Fallback: Query Reformulation Executed</span>
+            <span>CRAG Query Reformulation Executed</span>
           </div>
-          <div className="text-[11px] font-mono text-graphite-300">
+          <div className="text-[11px] font-mono text-ink-secondary space-y-0.5">
             {rewrittenQueries.map((rq, idx) => (
               <div key={idx} className="truncate">
                 Iter {idx + 1}: &quot;{rq}&quot;
@@ -66,31 +66,31 @@ export function AgentTraceStream({
           return (
             <div
               key={idx}
-              className="bg-graphite-850/80 border border-white/[0.04] rounded-lg p-2.5 flex items-start justify-between text-xs"
+              className="bg-subtle border border-hairline rounded-lg p-3 flex items-start justify-between gap-3 text-xs"
             >
-              <div className="flex items-start gap-2.5">
-                <div className="mt-0.5">
+              <div className="flex items-start gap-2.5 min-w-0">
+                <div className="mt-0.5 shrink-0">
                   {isDone ? (
-                    <CheckCircle2 className="w-3.5 h-3.5 text-clinical-emerald" />
+                    <CheckCircle2 className="w-4 h-4 text-clinical-emerald" />
                   ) : (
-                    <Clock className="w-3.5 h-3.5 text-clinical-amber animate-spin" />
+                    <Clock className="w-4 h-4 text-clinical-amber" />
                   )}
                 </div>
-                <div>
-                  <div className="font-medium text-graphite-200 flex items-center gap-2">
-                    <span>{step.step_name}</span>
-                    <span className="text-[10px] font-mono text-graphite-400">
-                      {step.latency_ms > 0 ? `${step.latency_ms}ms` : "in progress"}
+                <div className="min-w-0">
+                  <div className="font-medium text-ink flex flex-wrap items-center gap-2">
+                    <span className="font-mono text-[11px]">{step.step_name}</span>
+                    <span className="text-[11px] font-mono text-ink-muted tabular-nums">
+                      {step.latency_ms > 0 ? `${step.latency_ms}ms` : "In progress"}
                     </span>
                   </div>
-                  <div className="text-[11px] text-graphite-400 mt-0.5">
+                  <div className="text-xs text-ink-secondary mt-0.5 leading-relaxed">
                     {step.description}
                   </div>
                 </div>
               </div>
 
               {step.metadata && (
-                <div className="text-[10px] font-mono text-graphite-400 text-right space-y-0.5">
+                <div className="text-[11px] font-mono text-ink-muted text-right space-y-0.5 shrink-0">
                   {step.metadata.is_context_sufficient !== undefined && (
                     <div
                       className={

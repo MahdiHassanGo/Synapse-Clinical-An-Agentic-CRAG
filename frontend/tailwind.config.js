@@ -8,30 +8,35 @@ export default {
   theme: {
     extend: {
       colors: {
-        graphite: {
-          950: "#090a0c",
-          900: "#101214",
-          850: "#16181c",
-          800: "#1d2025",
-          750: "#252930",
-          700: "#2f343d",
-          600: "#454c59",
-          400: "#8c96a5",
-          200: "#cbd2dc",
-          100: "#e9edf2",
+        canvas: "#F5F6F4",
+        surface: "#FFFFFF",
+        subtle: "#EEF1EF",
+        muted: "#E3E8E5",
+        hairline: "#DCE2DE",
+        strong: "#C5CEC9",
+        ink: {
+          DEFAULT: "#141D1B",
+          secondary: "#3F4D49",
+          muted: "#5C6B66",
+        },
+        accent: {
+          DEFAULT: "#0D6E63",
+          hover: "#09544B",
+          soft: "#E6F4F2",
+          border: "#A7DAD3",
         },
         clinical: {
-          blue: "#0ea5e9",
-          teal: "#14b8a6",
-          emerald: "#10b981",
-          amber: "#f59e0b",
-          rose: "#ef4444",
-        }
+          blue: "#1E56A0",
+          teal: "#0D6E63",
+          emerald: "#0E6F4E",
+          amber: "#9A4D06",
+          rose: "#B42318",
+        },
       },
       fontFamily: {
-        sans: ["var(--font-sans)", "-apple-system", "BlinkMacSystemFont", "Segoe UI", "sans-serif"],
+        sans: ["var(--font-sans)", "var(--font-noto)", "-apple-system", "BlinkMacSystemFont", "Segoe UI", "sans-serif"],
         mono: ["var(--font-mono)", "SF Mono", "Menlo", "monospace"],
-      }
+      },
     },
   },
   plugins: [],
