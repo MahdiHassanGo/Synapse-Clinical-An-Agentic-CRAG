@@ -190,10 +190,10 @@ export function PatientSidebar({
             <div className="bg-graphite-850 border border-white/[0.08] rounded-xl p-3.5 space-y-2">
               <div className="flex items-center gap-1.5 text-xs font-medium text-graphite-200">
                 <Pill className="w-3.5 h-3.5 text-clinical-blue" />
-                <span>Active Prescriptions ({patientDetail.active_medications.length})</span>
+                <span>Active Prescriptions ({patientDetail.active_medications?.length ?? 0})</span>
               </div>
               <div className="space-y-1.5">
-                {patientDetail.active_medications.map((m, idx) => (
+                {patientDetail.active_medications?.map((m, idx) => (
                   <div
                     key={idx}
                     className="p-2 rounded bg-graphite-900/70 border border-white/[0.04] text-xs flex justify-between items-center"
@@ -215,14 +215,14 @@ export function PatientSidebar({
             </div>
 
             {/* Allergies */}
-            {patientDetail.allergies.length > 0 && (
+            {(patientDetail.allergies?.length ?? 0) > 0 && (
               <div className="bg-graphite-850 border border-white/[0.08] rounded-xl p-3.5 space-y-2">
                 <div className="flex items-center gap-1.5 text-xs font-medium text-clinical-rose">
                   <AlertTriangle className="w-3.5 h-3.5" />
                   <span>Documented Allergies</span>
                 </div>
                 <div className="space-y-1.5">
-                  {patientDetail.allergies.map((a, idx) => (
+                  {patientDetail.allergies?.map((a, idx) => (
                     <div
                       key={idx}
                       className="p-2 rounded bg-clinical-rose/10 border border-clinical-rose/20 text-xs"

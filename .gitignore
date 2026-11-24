@@ -58,3 +58,5 @@ yarn-error.log*
 *.swo
 .idea/
 .vscode/
+.vercel
+.env*

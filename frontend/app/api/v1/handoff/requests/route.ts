@@ -14,7 +14,10 @@ export async function GET() {
     }
   }
 
-  return NextResponse.json(DEMO_HANDOFF_REQUESTS);
+  return NextResponse.json({
+    count: DEMO_HANDOFF_REQUESTS.length,
+    requests: DEMO_HANDOFF_REQUESTS,
+  });
 }
 
 export async function POST(request: Request) {

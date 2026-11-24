@@ -352,9 +352,9 @@ export function PatientChatView() {
                         <span className="text-clinical-blue">{m.recommended_specialists.length} available</span>
                       </div>
                       <div className="grid grid-cols-1 gap-1.5">
-                        {m.recommended_specialists.map((doc: any) => (
+                        {m.recommended_specialists.map((doc: any, idx: number) => (
                           <div
-                            key={doc.id}
+                            key={doc.id || doc.doctor_id || `doc_${idx}`}
                             className="p-2 rounded-xl bg-graphite-950/80 border border-white/[0.06] hover:border-clinical-blue/30 transition-all flex items-center justify-between gap-2"
                           >
                             <div className="min-w-0">
@@ -366,7 +366,7 @@ export function PatientChatView() {
                                   </span>
                                 )}
                               </div>
-                              <div className="text-[10px] text-clinical-blue">{doc.specialization}</div>
+                              <div className="text-[10px] text-clinical-blue">{doc.specialization || doc.specialty}</div>
                               <div className="text-[9px] text-graphite-400 font-mono">
                                 {doc.available_schedule}
                               </div>

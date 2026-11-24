@@ -92,13 +92,13 @@ export function PharmacovigilanceModal({
           </div>
 
           {/* Contraindications List */}
-          {hitlData.contraindications_detected.length > 0 && (
+          {(hitlData.contraindications_detected?.length ?? 0) > 0 && (
             <div className="space-y-2">
               <span className="text-graphite-400 font-medium">
                 Detected High-Risk Contraindications
               </span>
               <div className="space-y-2 max-h-48 overflow-y-auto">
-                {hitlData.contraindications_detected.map((alert, idx) => (
+                {hitlData.contraindications_detected?.map((alert, idx) => (
                   <div
                     key={idx}
                     className="p-3 rounded-lg bg-graphite-850 border border-white/[0.06] space-y-1"

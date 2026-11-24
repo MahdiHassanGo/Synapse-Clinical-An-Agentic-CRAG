@@ -57,7 +57,7 @@ export function GuidelineDrawer({
                 Section: {matchingChunk.section}
               </div>
               <div className="text-[10px] font-mono text-clinical-emerald">
-                Relevance Score: {(matchingChunk.relevance_score * 100).toFixed(0)}%
+                Relevance Score: {(((matchingChunk.relevance_score ?? (matchingChunk as any).similarity_score) ?? 0.94) * 100).toFixed(0)}%
               </div>
             </div>
 

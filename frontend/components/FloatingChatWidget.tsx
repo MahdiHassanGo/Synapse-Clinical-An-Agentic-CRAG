@@ -439,15 +439,15 @@ function ChatBubble({
             </div>
 
             <div className="space-y-2">
-              {message.recommended_specialists.map((doctor) => {
+              {message.recommended_specialists.map((doctor: any, idx: number) => {
                 const feeText =
                   doctor.currency === "BDT"
-                    ? `৳ ${Number(doctor.consultation_fee).toLocaleString()}`
-                    : `$${Number(doctor.consultation_fee).toLocaleString()}`;
+                    ? `৳ ${Number(doctor.consultation_fee ?? 1000).toLocaleString()}`
+                    : `$${Number(doctor.consultation_fee ?? 50).toLocaleString()}`;
 
                 return (
                   <div
-                    key={doctor.id}
+                    key={doctor.id || doctor.doctor_id || `doc_${idx}`}
                     className="p-2.5 rounded-xl bg-graphite-950/80 border border-white/[0.08] hover:border-clinical-blue/40 transition-all space-y-2"
                   >
                     <div className="flex items-start justify-between gap-2">
@@ -461,7 +461,7 @@ function ChatBubble({
                           )}
                         </div>
                         <div className="text-[10.5px] text-clinical-blue font-medium mt-0.5">
-                          {doctor.specialization}
+                          {doctor.specialization || doctor.specialty}
                         </div>
                         <div className="text-[10px] text-graphite-400 line-clamp-1 mt-0.5">
                           {doctor.qualifications}

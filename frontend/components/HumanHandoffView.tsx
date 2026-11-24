@@ -47,9 +47,10 @@ export function HumanHandoffView() {
     try {
       const res = await fetch(`${BACKEND_URL}/api/v1/handoff/requests`);
       const data = await res.json();
-      setRequests(data.requests || []);
-      if (data.requests && data.requests.length > 0 && !selectedRequest) {
-        setSelectedRequest(data.requests[0]);
+      const list = Array.isArray(data) ? data : (data.requests || []);
+      setRequests(list);
+      if (list.length > 0 && !selectedRequest) {
+        setSelectedRequest(list[0]);
       }
     } catch (err) {
       console.error("Failed to fetch handoff requests:", err);
