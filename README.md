@@ -17,13 +17,47 @@
 > 🚀 **Live Interactive Demo:** [https://frontend-chi-seven-22.vercel.app](https://frontend-chi-seven-22.vercel.app)  
 > Fully autonomous live deployment on Vercel featuring synthetic EHR cohort (P101–P104), bilingual patient navigator (English & বাংলা), interactive floating widget, emergency red-flag triage, real-time SSE CRAG/Self-RAG evaluation stream, and clinician HITL safety oversight.
 
-> **Enterprise-Grade Healthcare Intelligence Platform**: A dual-experience AI system featuring a **Public Patient Conversational AI Agent** (bilingual English & Bengali, emergency screening, embeddable widget, human handoff queue) alongside an authenticated **Clinician Copilot** (14-node LangGraph state machine, Corrective RAG, claim-level Self-RAG verification, deterministic calculators, pharmacovigilance contraindications, and regulatory Human-in-the-Loop oversight).
+> **Enterprise-Grade Healthcare Intelligence Platform**: A dual-experience AI system featuring a **Public Patient Conversational AI Agent** (bilingual English & Bengali, emergency screening, specialist matching, embeddable widget, human handoff queue) alongside an authenticated **Clinician Copilot** (14-node LangGraph state machine, Corrective RAG, claim-level Self-RAG verification, deterministic calculators, pharmacovigilance contraindications, and regulatory Human-in-the-Loop oversight), presented in a **Warm Clinical Paper & Surgical Teal** daylight interface.
 
 ---
 
 > [!CAUTION]
 > **RESEARCH & PORTFOLIO DEMONSTRATION ONLY**  
 > Synapse Clinical operates strictly on synthetic patient cohorts (P101–P104) and public clinical guidelines (NICE, KDIGO, WHO, BMDC). This software is not an FDA/CE-cleared medical device and is **strictly prohibited from autonomous patient diagnosis, prescription issuance, or treatment execution**. All high-risk interventions are gated by mandatory clinician sign-off.
+
+---
+
+## Visual Walkthrough & Platform Showcase
+
+### 1. Executive Clinical Overview Dashboard
+The landing overview presents real-time patient session telemetry, message volume across English and Bengali cohorts, triage escalation counts, FlashRank reranking latency, and quick-launch clinical benchmark scenarios in a calm, high-contrast clinical paper layout.
+
+![Overview Dashboard](docs/screenshots/01-overview-dashboard.png)
+
+### 2. Clinician Copilot — Evidence Synthesis & Claim-Level Self-RAG Verification
+Evaluates patient EHR records (such as **Eleanor Vance, P101** with CKD Stage G4, eGFR `22.4 mL/min`) alongside clinical queries. Every generated clinical recommendation reports **Support** (`96%`) and **Utility** (`95%`) tokens, followed by atomic **Factual Entailment Verification** linking each claim directly to authoritative guideline chunks (`NICE_NG28_DIABETES#1`, `KDIGO_CKD_2024#1`).
+
+![Clinician Copilot & Self-RAG](docs/screenshots/04-clinician-copilot-self-rag.png)
+
+### 3. Patient Conversational AI — Bilingual Triage & Specialist Matching
+Public visitors interact in **English or বাংলা (Bengali)** in a strictly isolated sandbox (zero SQL access, zero EHR mutations). Queries such as recurring migraines with visual sensitivity are routed via CRAG to matched neurologists with BMDC registration numbers, schedules, and consultation fees, alongside an embeddable `widget.js` snippet and language telemetry.
+
+![Patient Conversational AI](docs/screenshots/03-patient-conversational-ai.png)
+
+### 4. Agentic RAG Execution Runs & Human-in-the-Loop (HITL) Supervision
+Tracks multi-step LangGraph executions with live Server-Sent Events (SSE) replay. High-risk drug interactions (such as **Warfarin + Ibuprofen** in **Arthur Pendleton, P102**) pause execution at `PAUSED_FOR_REVIEW`, requiring authenticated clinician sign-off and mandatory override rationale before resuming.
+
+![Agent Runs & HITL Supervision](docs/screenshots/02-agent-runs-hitl.png)
+
+### 5. Clinical RAG Evaluation & Retrieval Benchmarking
+Provides deterministic quantitative benchmarking across the clinical knowledge base — tracking **Recall@5 (`94.0%`)**, **Precision@5 (`88.0%`)**, **MRR (`0.910`)**, **nDCG@5 (`0.920`)**, and **Claim-Level Groundedness (`96.0%`)** — alongside mathematical evaluation formulas.
+
+![Clinical RAG Evaluation](docs/screenshots/05-rag-evaluation-benchmark.jpg)
+
+### 6. Multi-Model Orchestrator & System Governance
+Displays live LiteLLM / OpenRouter / Local Edge provider health and task-specific routing policies, enforcing strict architectural boundaries where `DETERMINISTIC_CALCULATION` (CKD-EPI / Cockcroft-Gault) and `DRUG_SAFETY_CHECK` (pharmacovigilance rules) allow **zero LLM arithmetic or contraindication guessing**.
+
+![Model Orchestrator & Governance](docs/screenshots/06-model-orchestrator-governance.jpg)
 
 ---
 
@@ -102,7 +136,7 @@ graph TD
 | **6** | `orchestrator` | **Model Orchestrator** | Multi-model routing policies (LiteLLM), circuit breaker status, and live provider benchmarks. |
 | **7** | `handoff` | **Human Support / Handoff** | Escalation ticket queue for clinic triage staff with urgency filters, assignment, and clinical notes. |
 | **8** | `evaluation` | **RAG Evaluation** | Quantitative benchmarks (Recall@5, Precision@5, MRR, nDCG@5, Groundedness %, Ablations). |
-| **9** | **Tenants** | `tenants` | Multi-tenant hospital administration, allowed domains, logos, and localized emergency hotlines. |
+| **9** | `tenants` | **Tenant Management** | Multi-tenant hospital administration, allowed domains, logos, and localized emergency hotlines. |
 | **10** | `users` | **User & Role RBAC** | Role-based access control (Admin, Clinician, Triage Nurse, Patient) and permission matrix. |
 | **11** | `audit` | **Regulatory Audit Logs** | Immutable regulatory audit trail for clinician HITL sign-offs and patient consent records. |
 | **12** | `settings` | **System Settings** | Platform configuration, model API keys, database connection pooling, and preferences. |
@@ -115,11 +149,10 @@ Embed the patient assistant into any website, WordPress template, or patient por
 
 ```html
 <script 
-  src="https://synapse.ai/widget.js" 
+  src="https://frontend-chi-seven-22.vercel.app/widget.js" 
   data-tenant-id="DEFAULT_HOSPITAL" 
-  data-api-url="http://127.0.0.1:8000" 
-  data-lang="en" 
-  data-theme="dark">
+  data-api-url="https://frontend-chi-seven-22.vercel.app" 
+  data-lang="en">
 </script>
 ```
 
@@ -176,7 +209,7 @@ Synapse Clinical v4.1 is containerized and production-ready for zero-downtime de
 | :--- | :--- | :--- |
 | **Vercel (Live)** | Next.js 15 Standalone Web UI (`frontend/`) | 🔗 **[frontend-chi-seven-22.vercel.app](https://frontend-chi-seven-22.vercel.app)**<br>[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FMahdiHassanGo%2FSynapse-Clinical-An-Agentic-CRAG&root-directory=frontend) |
 | **Railway** | Full-Stack (FastAPI API + Next.js Frontend + PostgreSQL pgvector) | [![Deploy on Railway](https://railway.com/button.svg)](https://railway.com/new/template?template=https%3A%2F%2Fgithub.com%2FMahdiHassanGo%2FSynapse-Clinical-An-Agentic-CRAG) |
-| **Render** | Multi-Service Blueprint via [`render.yaml`](file:///Users/asif/Documents/04%20Learning%20and%20Coursework/Level%202%20/Synapse%20Clinical/render.yaml) | [![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/MahdiHassanGo/Synapse-Clinical-An-Agentic-CRAG) |
+| **Render** | Multi-Service Blueprint via [`render.yaml`](./render.yaml) | [![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/MahdiHassanGo/Synapse-Clinical-An-Agentic-CRAG) |
 
 ---
 
@@ -207,7 +240,7 @@ Railway provisions both the FastAPI Python backend and the Next.js frontend in a
 
 ### 6.3 Deploying on Render (Native Blueprint)
 
-This repository includes a native [`render.yaml`](file:///Users/asif/Documents/04%20Learning%20and%20Coursework/Level%202%20/Synapse%20Clinical/render.yaml) specification:
+This repository includes a native [`render.yaml`](./render.yaml) specification:
 
 1. Click **[Deploy to Render](https://render.com/deploy?repo=https://github.com/MahdiHassanGo/Synapse-Clinical-An-Agentic-CRAG)**.
 2. Render reads `render.yaml` and deploys:
